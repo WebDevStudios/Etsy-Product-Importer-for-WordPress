@@ -60,6 +60,11 @@ Display your product's images in a Thickbox gallery using WordPress' built-in Th
 
 == Changelog ==
 
+= 1.2.0 =
+* Add ability to grab more than 25 products by paging through your store in sets of 25
+* Add filters to hook into shortcodes, cron schedule, and post args when importing products
+* General cleanup of code with the help of @jtsternberg.  Thanks!
+
 = 1.1.1 =
 * Fix line grabbing the title of a product when using a shortcode
 

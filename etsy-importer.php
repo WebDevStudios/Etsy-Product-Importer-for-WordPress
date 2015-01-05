@@ -5,7 +5,7 @@ Plugin URI: http://www.webdevstudios.com
 Description: Import your Etsy store's products as posts in a custom post type.
 Author: WebDevStudios
 Author URI: http://www.webdevstudios.com
-Version: 1.1.0
+Version: 1.2.0
 License: GPLv2
 */
 
@@ -18,7 +18,7 @@ License: GPLv2
  */
 Class Etsy_Importer {
 
-	const VERSION = '1.1.0';
+	const VERSION = '1.2.0';
 
 	// A single instance of this class.
 	public static $instance = null;
