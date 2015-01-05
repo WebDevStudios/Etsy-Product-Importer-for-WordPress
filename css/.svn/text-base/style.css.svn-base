@@ -1,0 +1,49 @@
+.form-table th,
+.submit {
+	padding-left: 15px;
+}
+
+.form-table td .import-count {
+	margin-top: 35px;
+}
+
+.form-table td #api-key {
+	max-width: 215px;
+	min-width: 215px;
+}
+
+.form-table td #store-id {
+	max-width: 80px;
+	min-width: 80px;
+}
+
+#options-form .button-primary {
+	width: 125px;
+}
+
+#options-form .button-primary:active {
+	padding-top: 0;
+	vertical-align: baseline;
+}
+
+#options-form .submit {
+	margin-bottom: 10px;
+	padding-bottom: 0;
+}
+
+#options-form .save-notes {
+	margin: 0 0 10px;
+	overflow: hidden;
+	padding: 0 0 0 15px;
+}
+
+#options-form .button-import {
+	background: #34B928;
+	border-color: #2C9B22;
+	float: left;
+}
+
+#options-form .button-import:active,
+#options-form .button-import:hover {
+	background: #2C9B22;
+}
