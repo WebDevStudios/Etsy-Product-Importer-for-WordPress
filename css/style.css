@@ -1,5 +1,7 @@
-.form-table th,
-.submit {
+.cmb-td {
+	width: 80%;
+}
+.form-table th {
 	padding-left: 15px;
 }
 
@@ -17,6 +19,15 @@
 	min-width: 80px;
 }
 
+.form-table td .checkbox {
+	float: left;
+}
+
+.form-table td label {
+	display: block;
+	margin-left: 30px;
+}
+
 #options-form .button-primary {
 	width: 125px;
 }
@@ -28,7 +39,7 @@
 
 #options-form .submit {
 	margin-bottom: 10px;
-	padding-bottom: 0;
+	padding: 10px 15px 0;
 }
 
 #options-form .save-notes {

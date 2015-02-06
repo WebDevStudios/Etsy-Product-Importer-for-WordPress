@@ -5,7 +5,7 @@ Plugin URI: http://www.webdevstudios.com
 Description: Import your Etsy store's products as posts in a custom post type.
 Author: WebDevStudios
 Author URI: http://www.webdevstudios.com
-Version: 1.2.0
+Version: 1.3.0
 License: GPLv2
 */
 
@@ -18,10 +18,10 @@ License: GPLv2
  */
 Class Etsy_Importer {
 
-	const VERSION = '1.2.0';
+	const VERSION = '1.3.0';
 
 	// A single instance of this class.
-	public static $instance = null;
+	public static $instance  = null;
 
 	/**
 	 * Creates or returns an instance of this class.
@@ -39,18 +39,16 @@ Class Etsy_Importer {
 	/**
 	 * Build our class and run the functions
 	 */
-	private function __construct() {
+	public function __construct() {
+
+		// Include CMB2 Fields
+		require_once( 'etsy-fields.php' );
 
 		// Setup our cron job
 		add_action( 'wp', array( $this, 'setup_cron_schedule' ) );
 
 		// Run our cron job to import new products
 		add_action( 'etsy_importer_daily_cron_job', array( $this, 'import_posts' ) );
-
-		// Add our menu items
-		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-		add_action( 'admin_init', array( $this, 'register_admin_settings' ) );
-		add_action( 'admin_init', array( $this, 'process_settings_save') );
 
 		// Load translations
 		load_plugin_textdomain( 'etsy_importer', false, 'etsy-importer/languages' );
@@ -63,6 +61,9 @@ Class Etsy_Importer {
 
 		// Register our taxonomies
 		add_action( 'init', array( $this, 'taxonomies' ) );
+
+		// Run when we save our settings
+		add_action( 'cmb2_save_options-page_fields', array( $this, 'settings_save' ) );
 
 		// Don't load in WP Dashboard
 		if ( is_admin() ) {
@@ -77,15 +78,64 @@ Class Etsy_Importer {
 		add_shortcode( 'product_content', array( $this, 'product_content_shortcode' ) );
 		add_shortcode( 'product_images', array( $this, 'product_images_shortcode' ) );
 
-		// Include CMB
-		require_once( 'cmb/etsy-fields.php' );
-		require_once( 'cmb/init.php' );
+		// Grab our new values set via CMB2
+		$etsy_options = get_option( 'etsy_options' );
+		$api_key      = isset( $etsy_options['etsy_importer_api_key'] ) ? esc_html( $etsy_options['etsy_importer_api_key'] ) : '';
+		$store_id     = isset( $etsy_options['etsy_importer_store_id'] ) ? esc_html( $etsy_options['etsy_importer_store_id'] ) : '';
+		$checkbox     = isset( $etsy_options['etsy_importer_status_checkbox'] ) ? $etsy_options['etsy_importer_status_checkbox'] : '';
 
-		// Get the shop ID and our API key
-		$this->options  = get_option( 'etsy_store_settings' );
-		$this->api_key  = ( isset( $this->options['settings_etsy_api_key'] ) ) ? esc_html( $this->options['settings_etsy_api_key'] ) : '';
-		$this->store_id = ( isset( $this->options['settings_etsy_store_id'] ) ) ? esc_html( $this->options['settings_etsy_store_id'] ) : '';
+		// Get our old values saved as options from previous versions of the plugin
+		// @TODO: Completely remove this in the future
+		$old_options   = get_option( 'etsy_store_settings' );
+		$old_api_key   = ( isset( $old_options['settings_etsy_api_key'] ) ) ? esc_html( $old_options['settings_etsy_api_key'] ) : '';
+		$old_store_id  = ( isset( $old_options['settings_etsy_store_id'] ) ) ? esc_html( $old_options['settings_etsy_store_id'] ) : '';
 
+		// Set our API Key value to be used throughout the class
+		// @TODO: Completely remove this in the future
+		if ( isset( $api_key ) && '' !== $api_key ) {
+			$this->api_key = $api_key;
+		} elseif ( $old_api_key ) {
+			$this->api_key = $old_api_key;
+		} else {
+			$this->api_key = '';
+		}
+
+		// Set our Store ID value to be used throughout the class
+		// @TODO: Completely remove this in the future
+		if ( isset( $store_id ) && '' !== $store_id ) {
+			$this->store_id = $store_id;
+		} elseif ( $old_store_id ) {
+			$this->store_id = $old_store_id;
+		} else {
+			$this->store_id = '';
+		}
+
+		// Set our checkbox value to be used throughout the class
+		$this->post_status_on_import = $checkbox;
+	}
+
+	/**
+	 * Set our filterable post type
+	 */
+	public function post_type_key() {
+
+		return apply_filters( 'etsy_importer_custom_post_type_key', 'etsy_products' );
+	}
+
+	/**
+	 * Set our filterable category key
+	 */
+	public function category_key() {
+
+		return apply_filters( 'etsy_importer_category_key', 'etsy_category' );
+	}
+
+	/**
+	 * Set our filterable tag key
+	 */
+	public function tag_key() {
+
+		return apply_filters( 'etsy_importer_tag_key', 'etsy_tag' );
 	}
 
 	/**
@@ -110,7 +160,6 @@ Class Etsy_Importer {
 
 	}
 
-
 	/**
 	 * Define a constant if it hasn't been already (this allows them to be overridden)
 	 * @since  1.0.0
@@ -124,7 +173,6 @@ Class Etsy_Importer {
 		}
 	}
 
-
 	/**
 	 * Load global styles
 	 */
@@ -134,7 +182,6 @@ Class Etsy_Importer {
 		wp_enqueue_style( 'etsy-importer', ETSY_CSS . 'style.css', null, self::VERSION );
 
 	}
-
 
 	/**
 	 * Load global styles
@@ -146,21 +193,29 @@ Class Etsy_Importer {
 		if ( isset( $post->post_content ) && has_shortcode( $post->post_content, 'product_images' ) ) {
 			add_thickbox();
 		}
-
 	}
 
-
 	/**
-	 * Register Custom Post Types
+	 * Set our Custom Post Type labels
 	 *
 	 * Name (Singular), Name (Plural), Post Type Key (lowercase, use underscore for space),
 	 * URL Slug (lowercase, use dash for space), Search, Link To Taxonomies, Hierachical, Menu Position, Supports
 	 */
 	public function post_types() {
 
-		$this->post_type( array( __( 'Product', 'etsy_importer' ), __( 'Products', 'etsy_importer' ), 'etsy_products', 'products' ), array( 'menu_position' => '4' ) );
+		// Check to see if our post type is registered already.  If so, stop the presses.
+		if ( post_type_exists( $this->post_type_key() ) ) {
+			return;
+		}
+
+		$this->post_type( array( __( 'Product', 'etsy_importer' ), __( 'Products', 'etsy_importer' ), $this->post_type_key(), 'products' ), array( 'menu_position' => '4' ) );
 	}
 
+	/**
+	 * Register our custom post type
+	 * @param  array  $type  Label values for CPT label
+	 * @param  array  $args  CPT settings
+	 */
 	public function post_type( $type, $args = array() ) {
 
 		$type_single = $type[0];
@@ -172,7 +227,7 @@ Class Etsy_Importer {
 		$labels = array(
 			'name'               => $type_single,
 			'singular_name'      => $type_single,
-			'add_new'            => __( 'Add New' ),
+			'add_new'            => __( 'Add New', 'etsy_importer' ),
 			'add_new_item'       => sprintf( __( 'Add New %s', 'etsy_importer' ), $type_single ),
 			'edit_item'          => sprintf( __( 'Edit %s', 'etsy_importer' ), $type_single ),
 			'new_item'           => sprintf( __( 'New %s', 'etsy_importer' ), $type_single ),
@@ -203,22 +258,28 @@ Class Etsy_Importer {
 
 		// Register our post types
 		register_post_type( $key, $args );
-
 	}
 
-
 	/**
-	 * Register Taxonomies
+	 * Set custom taxonomy labels
 	 *
 	 * Name (Singular), Name (Plural), Taxonomy Key (lowercase, use underscore for space), URL Slug (lowercase, use dash for space), Parent Post Type Key
 	 */
 	public function taxonomies() {
 
-		$this->taxonomy( __( 'Category' ), __( 'Categories' ), 'etsy_category', 'category', array( 'etsy_products' ), true );
-		$this->taxonomy( __( 'Tag' ), __( 'Tags' ), 'etsy_tag', 'tag', array( 'etsy_products' ), true );
-
+		$this->taxonomy( __( 'Category' ), __( 'Categories' ), $this->category_key(), 'category', array( $this->post_type_key() ), true );
+		$this->taxonomy( __( 'Tag' ), __( 'Tags' ), $this->tag_key(), 'tag', array( $this->post_type_key() ), true );
 	}
 
+	/**
+	 * Register taxonomies
+	 * @param  string  $type            Singular name
+	 * @param  string  $types           Plural name
+	 * @param  string  $key             Taxonomy key
+	 * @param  string  $url_slug        Taxonomy slug
+	 * @param  array   $post_type_keys  Post type keys
+	 * @param  boolean $public          Boolean value for public/non-public taxonomy
+	 */
 	public function taxonomy( $type, $types, $key, $url_slug, $post_type_keys, $public ) {
 
 		// Setup our labels
@@ -264,181 +325,15 @@ Class Etsy_Importer {
 
 	}
 
-
-	/**
-	 * Add our menu items
-	 */
-	public function admin_menu() {
-
-		add_options_page( __( 'Etsy Importer', 'etsy_importer' ), __( 'Etsy Importer', 'etsy_importer' ), 'manage_options', __FILE__, array( $this, 'admin_page' ) );
-	}
-
-	/**
-	 * Register settings and fields
-	 */
-	public function register_admin_settings() {
-
-		// Add our settings
-		register_setting( 'etsy_store_settings', 'etsy_store_settings', array( $this, 'validate_settings' ) );
-		add_settings_section( 'etsy_store_main_options', '', '', __FILE__ );
-		add_settings_field( 'etsy_settings_api_key', __( 'API Key:', 'etsy_importer' ), array( $this, 'settings_etsy_api_key' ), __FILE__, 'etsy_store_main_options' );
-		add_settings_field( 'etsy_settings_store_id', __( 'Store ID:', 'etsy_importer' ), array( $this, 'settings_etsy_store_id' ), __FILE__, 'etsy_store_main_options' );
-	}
-
-	/**
-	 * Build the form fields
-	 */
-	public function settings_etsy_api_key() {
-
-		echo "<div class='input-wrap'><div class='left'><input id='api-key' name='etsy_store_settings[settings_etsy_api_key]' type='text' value='{$this->options['settings_etsy_api_key']}' /></div>";
-		?>
-
-		<p><?php printf( __( 'Need help? <a href="%s" class="thickbox">Click here</a> for a walkthrough on how to setup your Etsy Application.', 'etsy_importer' ), '#TB_inline?width=1200&height=600&inlineId=etsy-api-instructions' ); ?></p>
-
-		<div id="etsy-api-instructions" style="display: none;">
-			<p><?php printf( __( 'In order to import your products, you first need to register an application with Etsy.  <a href="%s" target="_blank">Click here</a> to begin registering your application.  You should see a screen similar to the image below:', 'etsy_importer' ), 'https://www.etsy.com/developers/register' ); ?><br />
-			<img src="<?php echo ETSY_DIR . 'screenshot-1.jpg'; ?>" /></p>
-
-			<p><?php _e( 'Once you have created your app, click "Apps You\'ve Made" in the sidebar and select your new app.  On the app detail page, copy the value in the Keystring input field.  This is your API Key.', 'etsy_importer' ); ?><br />
-			<img src="<?php echo ETSY_DIR . 'screenshot-2.jpg'; ?>" /></p>
-
-		</div>
-
-		<?php
-	}
-
-	/**
-	 * Build the form fields
-	 */
-	public function settings_etsy_store_id() {
-
-		// Get the total post count
-		$count_posts = wp_count_posts( 'etsy_products' );
-		$total_posts = $count_posts->publish + $count_posts->future + $count_posts->draft + $count_posts->pending + $count_posts->private;
-
-		$response = $this->get_response();
-		// Grab our shop name if we have a response
-		$shop_name = isset( $response->results[0]->title )
-			? sprintf( __( 'You are connected to <strong>%s</strong>.', 'etsy_importer' ), $response->results[0]->title )
-			: '';
-
-		echo "<div class='input-wrap'>
-			<div class='left'>
-				<input id='store-id' name='etsy_store_settings[settings_etsy_store_id]' type='text' value='{$this->options['settings_etsy_store_id']}' />
-			</div>";
-
-	?>
-
-		<p><?php printf( __( 'Need help? <a href="%s" class="thickbox">Click here</a> for a walkthrough on how to find your Etsy store ID.', 'etsy_importer' ), '#TB_inline?width=1200&height=600&inlineId=etsy-store-id-instructions' ); ?></p>
-
-		<div id="etsy-store-id-instructions" style="display: none;">
-			<p><?php _e( 'Visit your Etsy store\'s front page.  View the page source:', 'etsy_importer' ); ?><br />
-			<img src="<?php echo ETSY_DIR . 'screenshot-3.jpg'; ?>" /></p>
-
-			<p><?php _e( 'We want one specific line, whose meta name is "apple-itunes-app".  The number you see below following "etsy://shop/" is your store ID:', 'etsy_importer' ); ?><br />
-			<img src="<?php echo ETSY_DIR . 'screenshot-4.jpg'; ?>" /></p>
-
-		</div>
-
-		<p class="import-count">
-			<span>
-				<?php
-				echo $total_posts >= 1 ? sprintf( __( 'You have imported <strong>%s products</strong>.', 'etsy_importer' ), $total_posts ) . '<br />' : null;
-				echo $shop_name;
-				?>
-			</span>
-		</p>
-
-	<?php
-	}
-
-	/**
-	 * Sanitize the value
-	 */
-	public function validate_settings( $etsy_store_settings ) {
-		return $etsy_store_settings;
-	}
-
-	/**
-	 * Import our products and add our new taxonomy terms on settings save
-	 */
-	public function process_settings_save() {
-
-		$updated = 0;
-		// Save our API Key
-		if ( isset( $_POST['etsy_store_settings']['settings_etsy_api_key'] ) && ! empty( $_POST['etsy_store_settings']['settings_etsy_api_key'] ) ) {
-
-			// Update our class variables
-			$this->settings_etsy_api_key = $_POST['etsy_store_settings']['settings_etsy_api_key'];
-			$updated++;
-		}
-
-		// Save our Store ID
-		if ( isset( $_POST['etsy_store_settings']['settings_etsy_store_id'] ) && ! empty( $_POST['etsy_store_settings']['settings_etsy_store_id'] ) ) {
-
-			// Update our class variables
-			$this->settings_etsy_store_id = $_POST['etsy_store_settings']['settings_etsy_store_id'];
-			$updated++;
-		}
-
-
-		// If both our API Key and Store ID are saved, import our products
-		if ( isset( $_POST['etsy_import_nonce'] ) && isset( $_POST['submit-import'] ) && 2 === $updated ) {
-
-			// Import our products
-			$this->import_posts();
-		}
-	}
-
 	/**
 	 * On an early action hook, check if the hook is scheduled - if not, schedule it.
 	 * This runs once daily
 	 */
 	public function setup_cron_schedule() {
-
 		if ( ! wp_next_scheduled( 'etsy_importer_daily_cron_job' ) ) {
-			$frequency = apply_filters( 'etsy_importer_daily_cron_job', 'daily' );
-			wp_schedule_event( time(), $frequency, 'etsy_importer_daily_cron_job' );
+			wp_schedule_event( time(), 'daily', 'etsy_importer_daily_cron_job' );
 		}
 	}
-
-	/**
-	 * Build the admin page
-	 */
-	public function admin_page() {
-
-		// Get the total post count
-		$count_posts = wp_count_posts( 'etsy_products' );
-		$total_posts = $count_posts->publish + $count_posts->future + $count_posts->draft + $count_posts->pending + $count_posts->private;
-
-		$response = $this->get_response();
-
-		// If there is no response, disable the import button
-		$disabled = empty( $response ) ? 'disabled' : 'enabled';
-
-		?>
-		<div id="theme-options-wrap" class="metabox-holder">
-			<h2><?php _e( 'Etsy Importer', 'etsy_importer' ); ?></h2>
-			<form id="options-form" method="post" action="options.php" enctype="multipart/form-data">
-				<div class="postbox ui-tabs etsy-wrapper">
-					<h3 class="hndle"><?php _e( 'Import your Etsy store\'s products as posts in the Product custom post type.', 'etsy_importer' ); ?></h3>
-					<?php settings_fields( 'etsy_store_settings' ); ?>
-					<input type="hidden" name="etsy_import_nonce" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />
-					<?php do_settings_sections( __FILE__ ); ?>
-					<div class="submit">
-						<input name="submit-save" type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes', 'etsy_importer' ); ?>" />
-						<span class="save-notes"><em><?php _e( 'You must save changes before importing products. If you need to change your API Key or Store ID, hit the Save Changes button before hitting the Import Products button.', 'etsy_importer' ); ?></em></span>
-					</div>
-					<div class="submit">
-						<input name="submit-import" type="submit" class="button-primary button-import" value="<?php esc_attr_e( 'Import Products', 'etsy_importer' ); ?>" <?php echo $disabled; ?> />
-						<div class="save-notes"><em><?php _e( 'Your import could take a while if you have a large number of products or images attached to each product.', 'etsy_importer' ); ?></em>
-						<p><em><?php _e( 'After your initial import, your products will import automatically once daily.  If you need to manually import your products ahead of schedule, clicking the Import Products button will begin a manual import of new products.', 'etsy_importer' ); ?></em></p></div>
-					</div>
-				</div>
-			</form>
-		</div>
-	<?php }
-
 
 	/**
 	 * Add a shortcode to display the product title
@@ -490,7 +385,6 @@ Class Etsy_Importer {
 		return apply_filters( 'etsy_importer_product_link_shortcode', $output, $atts );
 	}
 
-
 	/**
 	 * Add a shortcode to display the product content
 	 *
@@ -539,9 +433,8 @@ Class Etsy_Importer {
 		return apply_filters( 'etsy_importer_product_content_shortcode', $output, $atts );
 	}
 
-
 	/**
-	 * Add a shortcode to display the product content
+	 * Add a shortcode to display the product images
 	 *
 	 * @since 1.0
 	 */
@@ -579,6 +472,7 @@ Class Etsy_Importer {
 
 		// If our content returns something, display it
 		if ( $images ) {
+
 			foreach ( $images as $image ) {
 
 				// Set the image ID
@@ -607,6 +501,21 @@ Class Etsy_Importer {
 		$id = $wpdb->get_var( $query );
 		return $id;
 
+	}
+
+	/**
+	 * Run some functionality when saving settings
+	 */
+	public function settings_save() {
+
+		// If both the API Key and Store ID values are set and both are not empty, do something
+		if ( isset( $this->api_key ) && '' !== $this->api_key && isset( $this->store_id ) && '' !== $this->store_id ) {
+			$this->import_posts();
+		}
+
+		if ( ! isset( $_POST['etsy_importer_status_checkbox'] ) ) {
+			$this->import_posts();
+		}
 	}
 
 	/**
@@ -664,6 +573,10 @@ Class Etsy_Importer {
 			return;
 		}
 
+		// Check to see if any posts are no longer in our Etsy shop. If not, set them to draft mode
+		// ONLY when our checkbox is unchecked in settings
+		$this->set_inactive_posts_to_draft( $paged_response );
+
 		// Increase our time limit
 		set_time_limit( 120 );
 
@@ -671,7 +584,15 @@ Class Etsy_Importer {
 		foreach ( $paged_response->results as $product ) {
 
 			// If the post exists, don't bother
-			if ( get_page_by_title( esc_html( $product->title ), OBJECT, 'etsy_products' ) ) {
+			// @TODO: In our next update, switch this out to look for the matching product listing ID
+			if ( get_page_by_title( esc_html( $product->title ), OBJECT, $this->post_type_key() ) ) {
+
+				$existing_post = get_page_by_title( esc_html( $product->title ), OBJECT, $this->post_type_key() );
+
+				// Import the product listing ID as post meta
+				$this->import_product_listing_id( $existing_post->ID, $product );
+
+				// Then stop.
 				continue;
 			}
 
@@ -686,12 +607,12 @@ Class Etsy_Importer {
 
 			// Set our categories
 			if ( isset( $product->category_path ) ) {
-				wp_set_object_terms( $post_id, $product->category_path, 'etsy_category', true );
+				wp_set_object_terms( $post_id, $product->category_path, $this->category_key(), true );
 			}
 
 			// Set our tags
 			if ( isset( $product->tags ) ) {
-				wp_set_object_terms( $post_id, $product->tags, 'etsy_tag', true );
+				wp_set_object_terms( $post_id, $product->tags, $this->tag_key(), true );
 			}
 
 			// Get each listing's images
@@ -710,14 +631,25 @@ Class Etsy_Importer {
 	 */
 	public function setup_post_args( $product ) {
 
+		// Get the product description
 		$product_description = ! empty( $product->description ) ? wp_kses_post( $product->description ) : '';
 
 		return apply_filters( 'etsy_importer_product_import_insert_args', array(
-			'post_type'    => 'etsy_products',
+			'post_type'    => $this->post_type_key(),
 			'post_title'   => esc_html( $product->title ),
 			'post_content' => $product_description,
 			'post_status'  => 'publish',
-		) );
+		), $product );
+	}
+
+	/**
+	 * Import the product listing ID as post meta
+	 */
+	public function import_product_listing_id( $post_id, $product ) {
+
+		if ( isset( $product->listing_id ) ) {
+			update_post_meta( $post_id, '_etsy_product_id', intval( $product->listing_id ) );
+		}
 	}
 
 	/**
@@ -845,6 +777,60 @@ Class Etsy_Importer {
 		return json_decode( $body );
 	}
 
+	/**
+	 * Update our post status to draft mode if it is
+	 * no longer in the Active state on Etsy
+	 */
+	public function set_inactive_posts_to_draft( $paged_response ) {
+
+		// If the box is checked, don't try to change post statuses
+		if( isset( $_POST['etsy_importer_status_checkbox'] ) ) {
+			return;
+		}
+
+		// Retrieve ALL product posts
+		$all_products = get_posts( array( 'post_type' => $this->post_type_key(), 'posts_per_page' => -1, 'post_status' => 'any' ) );
+
+		// Begin an array of product titles
+		// as served by the Etsy API
+		$all_product_titles = array();
+
+		// Loop through each product from Etsy
+		foreach ( $paged_response->results as $product ) {
+
+			// Add the product title to our array
+			$all_product_titles[] = $product->title;
+
+		}
+
+		// Loop through each product in our CPT
+		foreach ( $all_products as $this_product ) {
+
+			// Set our in_array outcome to a variable
+			$in_product_array = in_array( $this_product->post_title, $all_product_titles );
+
+			// Set the default post status to publish
+			$post_status = apply_filters( 'etsy_importer_default_post_status', 'publish' );
+
+			// Check to see our post is in our product array.
+			// If not, set it to draft mode.
+			if ( ! $in_product_array ) {
+
+				$post_status = apply_filters( 'etsy_importer_updated_post_status', 'draft' );
+
+			}
+
+			// If it is not in the response, set it to draft
+			$update_post_args = array(
+				'ID'          => $this_product->ID,
+				'post_status' => $post_status
+			);
+
+			// Update our post settings
+			wp_update_post( apply_filters( 'etsy_importer_updated_post_args', $update_post_args ) );
+
+		}
+	}
 }
 
 // Instantiate the class
