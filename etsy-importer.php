@@ -41,8 +41,17 @@ class Etsy_Importer {
 	 */
 	public function __construct() {
 
+		// Include CMB2
+		require_once 'CMB2/init.php';
+
 		// Include CMB2 Fields
 		require_once( 'includes/fields.php' );
+
+		// Include Admin Settings Page
+		require_once( 'includes/admin.php' );
+		// Get it started
+		$this->admin = new Etsy_Options_Admin();
+		$this->admin->hooks();
 
 		// Setup our cron job
 		add_action( 'wp', array( $this, 'setup_cron_schedule' ) );
