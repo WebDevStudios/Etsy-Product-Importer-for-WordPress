@@ -16,7 +16,7 @@ License: GPLv2
  * @package WordPress
  * @subpackage Etsy Importer
  */
-Class Etsy_Importer {
+class Etsy_Importer {
 
 	const VERSION = '1.3.0';
 
@@ -41,8 +41,17 @@ Class Etsy_Importer {
 	 */
 	public function __construct() {
 
+		// Include CMB2
+		require_once 'CMB2/init.php';
+
 		// Include CMB2 Fields
-		require_once( 'etsy-fields.php' );
+		require_once( 'includes/fields.php' );
+
+		// Include Admin Settings Page
+		require_once( 'includes/admin.php' );
+		// Get it started
+		$this->admin = new Etsy_Options_Admin();
+		$this->admin->hooks();
 
 		// Setup our cron job
 		add_action( 'wp', array( $this, 'setup_cron_schedule' ) );
@@ -74,9 +83,8 @@ Class Etsy_Importer {
 		}
 
 		// Add shortcodes
-		add_shortcode( 'product_link', array( $this, 'product_link_shortcode' ) );
-		add_shortcode( 'product_content', array( $this, 'product_content_shortcode' ) );
-		add_shortcode( 'product_images', array( $this, 'product_images_shortcode' ) );
+		require_once( 'includes/shortcodes.php' );
+		$this->shortcodes = new Etsy_Importer_Shortcodes();
 
 		// Grab our new values set via CMB2
 		$etsy_options = get_option( 'etsy_options' );
@@ -101,7 +109,7 @@ Class Etsy_Importer {
 		}
 
 		// Set our Store ID value to be used throughout the class
-		// @TODO: Completely remove this in the future
+		// @TO DO: Completely remove this in the future
 		if ( isset( $store_id ) && '' !== $store_id ) {
 			$this->store_id = $store_id;
 		} elseif ( $old_store_id ) {
@@ -336,162 +344,6 @@ Class Etsy_Importer {
 	}
 
 	/**
-	 * Add a shortcode to display the product title
-	 *
-	 * @since 1.0
-	 */
-	public function product_link_shortcode( $atts, $content = null ) {
-
-		// Get our shortcode attributes
-		$atts = shortcode_atts( array(
-			'id'		=> '',
-			'external'	=> '',
-			'title'		=> '',
-		), $atts, 'product_link' );
-
-		extract( $atts );
-
-		// Get our post content
-		$product = get_post( $id );
-
-		// If there is no product found, stop
-		if ( ! $product ) {
-			return;
-		}
-
-		// Get our post or external link
-		if ( 'yes' == $external || 'true' == $external ) {
-
-			$link 	= esc_url( get_post_meta( $id, '_etsy_product_url', true ) );
-			$target	= '_blank';
-
-		} else {
-
-			$link 	= get_permalink( $id );
-			$target	= '_self';
-		}
-
-		// Get our link title
-		$title = ( $title ) ? $title : get_the_title( $id );
-
-		// Assume zer is nussing
-		$output = '';
-
-		// If our title and link return something, display the link
-		if ( $title && $link ) {
-			$output .= '<p><a href="' . $link . '" title="' . $title . '" target="' . $target . '">' . $title . '</a></p>';
-		}
-
-		return apply_filters( 'etsy_importer_product_link_shortcode', $output, $atts );
-	}
-
-	/**
-	 * Add a shortcode to display the product content
-	 *
-	 * @since 1.0
-	 */
-	public function product_content_shortcode( $atts, $content = null ) {
-
-		// Get our shortcode attributes
-		$atts = shortcode_atts( array(
-			'id'		=> '',
-			'length'	=> '',
-		), $atts, 'product_content' );
-
-		extract( $atts );
-
-		// Get our post content
-		$product = get_post( $id );
-
-		// If there is no product found, stop
-		if ( ! $product ) {
-			return;
-		}
-
-		$content = wpautop( $product->post_content );
-
-		// Assume zer is nussing
-		$output = '';
-
-		// If our content returns something, display it
-		if ( $content ) {
-
-			// If we have a length set, apply it
-			if ( '' !== $length ) {
-
-				$excerpt_length = $length;
-				$excerpt_more   = '&hellip;';
-				$output        .= '<p>' . wp_trim_words( $content, $excerpt_length, $excerpt_more ) . ' <a href="' . get_permalink( $id ) . '" class="more-link">' . __( 'Continue reading', 'etsy_importer' ) . ' <span class="screen-reader-text">' . $product->post_title . '</span></a></p>';
-
-			} else {
-
-				$output .= $content;
-
-			}
-		}
-
-		return apply_filters( 'etsy_importer_product_content_shortcode', $output, $atts );
-	}
-
-	/**
-	 * Add a shortcode to display the product images
-	 *
-	 * @since 1.0
-	 */
-	public function product_images_shortcode( $atts, $content = null ) {
-
-		// Get our shortcode attributes
-		$atts = shortcode_atts( array(
-			'id'	=> '',
-			'size'	=> '',
-		), $atts, 'product_images' );
-
-		extract( $atts );
-
-		// Get our post content
-		$product = get_post( $id );
-
-		// If there is no product found, stop
-		if ( ! $product ) {
-			return;
-		}
-
-		$img_args = apply_filters( 'etsy_importer_product_images_shortcode_args', array(
-			'post_type'			=> 'attachment',
-			'posts_per_page'	=> 500, // sanity
-			'post_parent'		=> $id,
-		), $atts );
-
-		// Get our post images
-		$images = get_posts( $img_args );
-
-		$thumb_size = apply_filters( 'etsy_importer_product_images_shortcode_thumb_size', 'thumbnail', $atts );
-
-		// Assume zer is nussing
-		$output = '';
-
-		// If our content returns something, display it
-		if ( $images ) {
-
-			foreach ( $images as $image ) {
-
-				// Set the image ID
-				$image_id = $image->ID;
-
-				// Grab the image based on the size passed in the shortcode
-				$image_thumb 	= wp_get_attachment_image( $image_id, $thumb_size );
-				$image_full 	= wp_get_attachment_image_src( $image_id, 'full' );
-
-				// Display the image
-				$output .= '<a href="' . $image_full[0]. '" class="thickbox" rel="gallery-' . $id . '">' . $image_thumb . '</a>';
-
-			}
-		}
-
-		return apply_filters( 'etsy_importer_product_images_shortcode', $output, $atts );
-	}
-
-	/**
 	 * Grab the image ID from its URL
 	 */
 	public function get_attachment_id_from_src( $image_src ){
@@ -499,8 +351,8 @@ Class Etsy_Importer {
 
 		$query = "SELECT ID FROM {$wpdb->posts} WHERE guid='$image_src'";
 		$id = $wpdb->get_var( $query );
-		return $id;
 
+		return $id;
 	}
 
 	/**
@@ -584,7 +436,7 @@ Class Etsy_Importer {
 		foreach ( $paged_response->results as $product ) {
 
 			// If the post exists, don't bother
-			// @TODO: In our next update, switch this out to look for the matching product listing ID
+			// @TO DO: In our next update, switch this out to look for the matching product listing ID
 			if ( get_page_by_title( esc_html( $product->title ), OBJECT, $this->post_type_key() ) ) {
 
 				$existing_post = get_page_by_title( esc_html( $product->title ), OBJECT, $this->post_type_key() );
@@ -784,7 +636,7 @@ Class Etsy_Importer {
 	public function set_inactive_posts_to_draft( $paged_response ) {
 
 		// If the box is checked, don't try to change post statuses
-		if( isset( $_POST['etsy_importer_status_checkbox'] ) ) {
+		if ( isset( $_POST['etsy_importer_status_checkbox'] ) ) {
 			return;
 		}
 
@@ -823,7 +675,7 @@ Class Etsy_Importer {
 			// If it is not in the response, set it to draft
 			$update_post_args = array(
 				'ID'          => $this_product->ID,
-				'post_status' => $post_status
+				'post_status' => $post_status,
 			);
 
 			// Update our post settings
