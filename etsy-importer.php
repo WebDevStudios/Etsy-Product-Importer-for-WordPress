@@ -99,7 +99,7 @@ class Etsy_Importer {
 		$old_store_id  = ( isset( $old_options['settings_etsy_store_id'] ) ) ? esc_html( $old_options['settings_etsy_store_id'] ) : '';
 
 		// Set our API Key value to be used throughout the class
-		// @TODO: Completely remove this in the future
+		// @TODO: Completely remove this in the future and just set the API Key based on the new CMB2 fields
 		if ( isset( $api_key ) && '' !== $api_key ) {
 			$this->api_key = $api_key;
 		} elseif ( $old_api_key ) {
@@ -109,7 +109,7 @@ class Etsy_Importer {
 		}
 
 		// Set our Store ID value to be used throughout the class
-		// @TO DO: Completely remove this in the future
+		// @TO DO: Completely remove this in the future and just set the Store ID based on the new CMB2 fields
 		if ( isset( $store_id ) && '' !== $store_id ) {
 			$this->store_id = $store_id;
 		} elseif ( $old_store_id ) {
