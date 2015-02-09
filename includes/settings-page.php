@@ -129,9 +129,9 @@ class Etsy_Options_Admin {
 		$output .= '<p class="cmb2-metabox-description">' . sprintf( __( 'Need help? <a href="%s" class="thickbox">Click here</a> for a walkthrough on how to setup your Etsy Application.', 'etsy_importer' ), '#TB_inline?&height=600&width=800&inlineId=etsy-api-instructions' ) . '</p>';
 		$output .= '<div id="etsy-api-instructions" style="display: none; width:800px;">';
 		$output .= '<p>' . sprintf( __( 'In order to import your products, you first need to register an application with Etsy.  <a href="%s" target="_blank">Click here</a> to begin registering your application.  You should see a screen similar to the image below:', 'etsy_importer' ), 'https://www.etsy.com/developers/register' ) . '<br />';
-		$output .= '<img src="' . PLUGIN_BASE_DIR . 'images/screenshot-create-an-app01.jpg" /></p>';
+		$output .= '<img src="' . PLUGIN_BASE_DIR . 'screenshot-1.jpg" /></p>';
 		$output .= '<p>' . __( 'Once you have created your app, click "Apps You\'ve Made" in the sidebar and select your new app.  On the app detail page, copy the value in the Keystring input field.  This is your API Key.', 'etsy_importer' ) . '<br />';
-		$output .= '<img src="' . PLUGIN_BASE_DIR . 'images/screenshot-create-an-app02.jpg" /></p>';
+		$output .= '<img src="' . PLUGIN_BASE_DIR . 'screenshot-2.jpg" /></p>';
 		$output .= '</div>';
 
 		return $output;
@@ -156,7 +156,7 @@ class Etsy_Options_Admin {
 		$output .= '<p class="cmb2-metabox-description">' . sprintf( __( 'Need help? <a href="%s" class="thickbox">Click here</a> for a walkthrough on how to find your Etsy store ID.', 'etsy_importer' ), '#TB_inline?&height=420&width=800&inlineId=etsy-store-id-instructions' ) . '</p>';
 		$output .= '<div id="etsy-store-id-instructions" style="display: none;">';
 		$output .= '<p>' . __( 'Visit your Etsy store\'s front page.  View the page source and copy the number in the URL of the "al:ios:url" property.  This is your shop ID.', 'etsy_importer' ) . '<br />';
-		$output .= '<img src="' . PLUGIN_BASE_DIR . 'images/screenshot-shop-id01.jpg" /></p>';
+		$output .= '<img src="' . PLUGIN_BASE_DIR . 'screenshot-3.jpg" /></p>';
 		$output .= '</div>';
 
 		return $output;
