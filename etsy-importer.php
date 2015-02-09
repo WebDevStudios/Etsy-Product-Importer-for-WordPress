@@ -48,9 +48,9 @@ class Etsy_Importer {
 		require_once( 'includes/fields.php' );
 
 		// Include Admin Settings Page
-		require_once( 'includes/admin.php' );
+		require_once 'includes/settings-page.php';
 		// Get it started
-		$this->admin = new Etsy_Options_Admin();
+		$this->admin = new Etsy_Options_Admin( $this->post_type_key() );
 		$this->admin->hooks();
 
 		// Setup our cron job
