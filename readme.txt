@@ -232,6 +232,7 @@ add_filter( 'etsy_importer_product_import_insert_args', 'your_project_modify_ets
 * If a post already exists in your WP site and its product state is no longer "Active" in your Etsy shop, set that post's status to draft
 * Add more documentation for all of the filters present in the plugin
 * Update settings page and post meta fields to use CMB2
+* Settings menu item moved inside the CPT menu
 
 = 1.2.0 =
 * Add ability to grab more than 25 products by paging through your store in sets of 25
