@@ -20,14 +20,13 @@ function etsy_metaboxes( array $meta_boxes ) {
 	$prefix = '_etsy_product_';
 
 	$meta_boxes['etsy_metaboxes'] = array(
-		'id'         => 'etsy_product_info',
-		'title'      => __( 'Product Information', 'etsy' ),
-		'object_types'      => array( 'etsy_products', ), // Post type
-		'context'    => 'normal',
-		'priority'   => 'high',
-		'show_names' => true, // Show field names on the left
-		// 'cmb_styles' => true, // Enqueue the CMB stylesheet on the frontend
-		'fields'     => array(
+		'id'           => 'etsy_product_info',
+		'title'        => __( 'Product Information', 'etsy' ),
+		'object_types' => array( apply_filters( 'etsy_importer_custom_post_type_key', 'etsy_products' ), ), // Post type
+		'context'      => 'normal',
+		'priority'     => 'high',
+		'show_names'   => true, // Show field names on the left
+		'fields'       => array(
 			array(
 				'name' => __( 'Price', 'etsy' ),
 				'id'   => $prefix . 'price',

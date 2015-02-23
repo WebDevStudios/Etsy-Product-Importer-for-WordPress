@@ -20,7 +20,7 @@ define( 'PLUGIN_BASE_DIR', plugins_url( '/', __FILE__ ) );
  */
 class Etsy_Importer {
 
-	const VERSION = '1.3.0';
+	const VERSION = '1.3.1';
 
 	// A single instance of this class.
 	public static $instance  = null;
@@ -44,13 +44,19 @@ class Etsy_Importer {
 	public function __construct() {
 
 		// Include CMB2
-		require_once 'CMB2/init.php';
+		if ( file_exists( __DIR__ . '/cmb2/init.php' ) ) {
+			require_once 'cmb2/init.php';
+		} elseif ( file_exists( __DIR__ . '/CMB2/init.php' ) ) {
+			echo 'hey buddy';
+			require_once 'CMB2/init.php';
+		}
 
 		// Include CMB2 Fields
-		require_once( 'includes/fields.php' );
+		require_once 'includes/fields.php';
 
 		// Include Admin Settings Page
 		require_once 'includes/settings-page.php';
+
 		// Get it started
 		$this->admin = new Etsy_Options_Admin( $this->post_type_key() );
 		$this->admin->hooks();

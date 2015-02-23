@@ -228,6 +228,10 @@ add_filter( 'etsy_importer_product_import_insert_args', 'your_project_modify_ets
 
 == Changelog ==
 
+= 1.3.1 =
+* Fix an issue with CMB2 init.php include
+* Apply post type filter to CMB2 field registration
+
 = 1.3.0 =
 * If a post already exists in your WP site and its product state is no longer "Active" in your Etsy shop, set that post's status to draft
 * Add more documentation for all of the filters present in the plugin
