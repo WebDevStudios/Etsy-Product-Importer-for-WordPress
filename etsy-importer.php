@@ -451,6 +451,9 @@ class Etsy_Importer {
 			// Update our post meta with the group ID
 			$this->update_product_post_meta( $post_id, $product );
 
+			// Import the product listing ID as post meta
+			$this->import_product_listing_id( $post_id, $product );
+
 			// Set our categories
 			if ( isset( $product->category_path ) ) {
 				wp_set_object_terms( $post_id, $product->category_path, $this->category_key(), true );
