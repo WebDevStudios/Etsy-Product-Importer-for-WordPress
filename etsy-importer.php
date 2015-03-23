@@ -100,32 +100,6 @@ class Etsy_Importer {
 		$store_id     = isset( $etsy_options['etsy_importer_store_id'] ) ? esc_html( $etsy_options['etsy_importer_store_id'] ) : '';
 		$checkbox     = isset( $etsy_options['etsy_importer_status_checkbox'] ) ? $etsy_options['etsy_importer_status_checkbox'] : '';
 
-		// Get our old values saved as options from previous versions of the plugin
-		// @TODO: Completely remove this in the future
-		$old_options   = get_option( 'etsy_store_settings' );
-		$old_api_key   = ( isset( $old_options['settings_etsy_api_key'] ) ) ? esc_html( $old_options['settings_etsy_api_key'] ) : '';
-		$old_store_id  = ( isset( $old_options['settings_etsy_store_id'] ) ) ? esc_html( $old_options['settings_etsy_store_id'] ) : '';
-
-		// Set our API Key value to be used throughout the class
-		// @TODO: Completely remove this in the future and just set the API Key based on the new CMB2 fields
-		if ( isset( $api_key ) && '' !== $api_key ) {
-			$this->api_key = $api_key;
-		} elseif ( $old_api_key ) {
-			$this->api_key = $old_api_key;
-		} else {
-			$this->api_key = '';
-		}
-
-		// Set our Store ID value to be used throughout the class
-		// @TO DO: Completely remove this in the future and just set the Store ID based on the new CMB2 fields
-		if ( isset( $store_id ) && '' !== $store_id ) {
-			$this->store_id = $store_id;
-		} elseif ( $old_store_id ) {
-			$this->store_id = $old_store_id;
-		} else {
-			$this->store_id = '';
-		}
-
 		// Set our checkbox value to be used throughout the class
 		$this->post_status_on_import = $checkbox;
 	}
