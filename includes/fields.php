@@ -47,6 +47,14 @@ function etsy_metaboxes( array $meta_boxes ) {
 				'id'   => $prefix . 'made_for',
 				'type' => 'text_medium',
 			),
+			array(
+				'name'         => __( 'Etsy Product ID', 'etsy' ),
+				'id'           => $prefix . 'id',
+				'type'         => 'text_small',
+				'attributes'   => array(
+					'disabled' => 'disabled'
+				)
+			),
 		)
 	);
 
