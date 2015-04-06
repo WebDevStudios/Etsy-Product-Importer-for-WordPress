@@ -228,6 +228,12 @@ add_filter( 'etsy_importer_product_import_insert_args', 'your_project_modify_ets
 
 == Changelog ==
 
+= 1.3.2 =
+* With this update, you will need to save your settings to reimport your products and add the product ID as post meta.
+* Remove functionality left in place to transition from old settings page to CMB2-powered settings page
+* Import the product ID as post meta
+* Check for the existence of an imported product by comparing the product ID
+
 = 1.3.1 =
 * Fix an issue with CMB2 init.php include
 * Apply post type filter to CMB2 field registration

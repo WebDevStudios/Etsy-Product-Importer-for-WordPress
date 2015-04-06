@@ -117,15 +117,10 @@ class Etsy_Options_Admin {
 	 */
 	public function api_key_description() {
 
-		$options    = get_option( 'etsy_store_settings' );
-		$old_value  = $options['settings_etsy_api_key'];
+		// Grab our settings
+		$options = get_option( 'etsy_store_settings' );
 
-		if( isset( $old_value ) ) {
-			$output = sprintf( __( 'Used our plugin before? If you don\'t see your existing API Key in the field above, don\'t worry - you\'ll see it right here: %s', 'etsy_importer' ), $old_value );
-		} else {
-			$output = __( 'Enter your API Key above.', 'etsy_importer' );
-		}
-
+		$output = __( 'Enter your API Key above.', 'etsy_importer' );
 		$output .= '<p class="cmb2-metabox-description">' . sprintf( __( 'Need help? <a href="%s" class="thickbox">Click here</a> for a walkthrough on how to setup your Etsy Application.', 'etsy_importer' ), '#TB_inline?&height=600&width=800&inlineId=etsy-api-instructions' ) . '</p>';
 		$output .= '<div id="etsy-api-instructions" style="display: none; width:800px;">';
 		$output .= '<p>' . sprintf( __( 'In order to import your products, you first need to register an application with Etsy.  <a href="%s" target="_blank">Click here</a> to begin registering your application.  You should see a screen similar to the image below:', 'etsy_importer' ), 'https://www.etsy.com/developers/register' ) . '<br />';
@@ -144,15 +139,10 @@ class Etsy_Options_Admin {
 	 */
 	public function store_id_description() {
 
-		$options    = get_option( 'etsy_store_settings' );
-		$old_value  = $options['settings_etsy_store_id'];
+		// Grab our settings
+		$options = get_option( 'etsy_store_settings' );
 
-		if( isset( $old_value ) ) {
-			$output = sprintf( __( 'Used our plugin before? If you don\'t see your existing Store ID in the field above, don\'t worry - you\'ll see it right here: %s', 'etsy_importer' ), $old_value );
-		} else {
-			$output = __( 'Enter your Store ID above.', 'etsy_importer' );
-		}
-
+		$output = __( 'Enter your Store ID above.', 'etsy_importer' );
 		$output .= '<p class="cmb2-metabox-description">' . sprintf( __( 'Need help? <a href="%s" class="thickbox">Click here</a> for a walkthrough on how to find your Etsy store ID.', 'etsy_importer' ), '#TB_inline?&height=420&width=800&inlineId=etsy-store-id-instructions' ) . '</p>';
 		$output .= '<div id="etsy-store-id-instructions" style="display: none;">';
 		$output .= '<p>' . __( 'Visit your Etsy store\'s front page.  View the page source and copy the number in the URL of the "al:ios:url" property.  This is your shop ID.', 'etsy_importer' ) . '<br />';

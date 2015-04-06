@@ -5,7 +5,7 @@ Plugin URI: http://www.webdevstudios.com
 Description: Import your Etsy store's products as posts in a custom post type.
 Author: WebDevStudios
 Author URI: http://www.webdevstudios.com
-Version: 1.3.1
+Version: 1.3.2
 License: GPLv2
 */
 
@@ -20,7 +20,7 @@ define( 'PLUGIN_BASE_DIR', plugins_url( '/', __FILE__ ) );
  */
 class Etsy_Importer {
 
-	const VERSION = '1.3.1';
+	const VERSION = '1.3.2';
 
 	// A single instance of this class.
 	public static $instance  = null;
@@ -99,12 +99,6 @@ class Etsy_Importer {
 		$api_key      = isset( $etsy_options['etsy_importer_api_key'] ) ? esc_html( $etsy_options['etsy_importer_api_key'] ) : '';
 		$store_id     = isset( $etsy_options['etsy_importer_store_id'] ) ? esc_html( $etsy_options['etsy_importer_store_id'] ) : '';
 		$checkbox     = isset( $etsy_options['etsy_importer_status_checkbox'] ) ? $etsy_options['etsy_importer_status_checkbox'] : '';
-
-		// Get our old values saved as options from previous versions of the plugin
-		// @TODO: Completely remove this in the future
-		$old_options   = get_option( 'etsy_store_settings' );
-		$old_api_key   = ( isset( $old_options['settings_etsy_api_key'] ) ) ? esc_html( $old_options['settings_etsy_api_key'] ) : '';
-		$old_store_id  = ( isset( $old_options['settings_etsy_store_id'] ) ) ? esc_html( $old_options['settings_etsy_store_id'] ) : '';
 
 		// Set our API Key value to be used throughout the class
 		$this->api_key = $api_key;
