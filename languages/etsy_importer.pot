@@ -1,7 +1,8 @@
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Etsy Importer\n"
-"POT-Creation-Date: 2015-09-24 01:26-0500\n"
+"POT-Creation-Date: 2015-09-24 01:42-0500\n"
 "PO-Revision-Date: 2015-09-24 01:27-0500\n"
 "Last-Translator: Michael Beckwith <michael.d.beckwith@gmail.com>\n"
 "Language-Team: Michael Beckwith <michael.d.beckwith@gmail.com>\n"
@@ -554,6 +555,12 @@ msgstr ""
 msgid "Choose from the most used %s"
 msgstr ""
 
+#: etsy-importer.php:373
+msgid ""
+"No product count paramater available from Etsy response. Are there any "
+"products available?"
+msgstr ""
+
 #: includes/fields.php:24
 msgid "Product Information"
 msgstr ""
@@ -600,6 +607,10 @@ msgid ""
 "will be automatically set to draft status; any product in your Etsy shop "
 "which was previously inactive and has become active will be automatically "
 "set to publish status."
+msgstr ""
+
+#: includes/settings-page.php:122
+msgid "Save &amp; Import"
 msgstr ""
 
 #: includes/settings-page.php:135
