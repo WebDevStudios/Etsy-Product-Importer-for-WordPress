@@ -331,7 +331,11 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Grab the image ID from its URL
+	 * Grab the image ID from its URL.
+	 *
+	 * @param string $image_src
+	 *
+	 * @return int $id
 	 */
 	public function get_attachment_id_from_src( $image_src ){
 		global $wpdb;
@@ -383,7 +387,11 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Get our paged results
+	 * Get our paged results.
+	 *
+	 * @param int $paged_total How many more to available to fetch for current page.
+	 * @param int $post_limit  Maximum amount to fetch for this page.
+	 * @param int $post_offset Where to start with the fetching of more results.
 	 */
 	public function get_page_results( $paged_total, $post_limit, $post_offset ) {
 
@@ -404,7 +412,9 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Get each product's data
+	 * Get each product's data.
+	 *
+	 * @param object $paged_response API result data.
 	 */
 	public function import_each_product( $paged_response ) {
 
@@ -469,7 +479,11 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Setup our post args
+	 * Setup our post args.
+	 *
+	 * @param object $product
+	 *
+	 * @return array
 	 */
 	public function setup_post_args( $product ) {
 
@@ -495,7 +509,10 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Add/Update the product's post meta
+	 * Add/Update the product's post meta.
+	 *
+	 * @param int    $post_id ID of the post to update.
+	 * @param object $product
 	 */
 	public function update_product_post_meta( $post_id, $product ) {
 
@@ -522,7 +539,10 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Attach the images to the product post
+	 * Attach the images to the product post.
+	 *
+	 * @param int    $post_id ID of the post to add images to.
+	 * @param object $response
 	 */
 	public function add_images_to_product_post( $post_id, $response ) {
 
@@ -578,7 +598,12 @@ class Etsy_Importer {
 
 
 	/**
-	 * Get paged results
+	 * Get paged results.
+	 *
+	 * @param int $post_limit
+	 * @param int $post_offset
+	 *
+	 * @return object
 	 */
 	public function get_paged_results( $post_limit, $post_offset ) {
 
@@ -589,7 +614,11 @@ class Etsy_Importer {
 
 
 	/**
-	 * Get the product's images
+	 * Get the product's images.
+	 *
+	 * @param object $product
+	 *
+	 * @return object
 	 */
 	public function get_product_images( $product ) {
 
@@ -600,7 +629,11 @@ class Etsy_Importer {
 
 	/**
 	 * Get results generically for a url
-	 * todo possibly better handline for wp_die in some instances
+	 * @todo possibly better handline for wp_die in some instances
+	 *
+	 * @param string $url
+	 *
+	 * @return object
 	 */
 	public function get_results( $url ) {
 
@@ -621,7 +654,9 @@ class Etsy_Importer {
 
 	/**
 	 * Update our post status to draft mode if it is
-	 * no longer in the Active state on Etsy
+	 * no longer in the Active state on Etsy.
+	 *
+	 * @param object $paged_response
 	 */
 	public function set_inactive_posts_to_draft( $paged_response ) {
 
