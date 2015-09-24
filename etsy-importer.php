@@ -262,8 +262,8 @@ class Etsy_Importer {
 	 */
 	public function taxonomies() {
 
-		$this->taxonomy( __( 'Category' ), __( 'Categories' ), $this->category_key(), 'category', array( $this->post_type_key() ), true );
-		$this->taxonomy( __( 'Tag' ), __( 'Tags' ), $this->tag_key(), 'tag', array( $this->post_type_key() ), true );
+		$this->taxonomy( __( 'Category', 'etsy_importer' ), __( 'Categories', 'etsy_importer' ), $this->category_key(), 'category', array( $this->post_type_key() ), true );
+		$this->taxonomy( __( 'Tag', 'etsy_importer' ), __( 'Tags', 'etsy_importer' ), $this->tag_key(), 'tag', array( $this->post_type_key() ), true );
 	}
 
 	/**
@@ -370,7 +370,7 @@ class Etsy_Importer {
 		$response = $this->get_results_count();
 
 		if ( ! isset( $response->count ) ) {
-			wp_die( 'No product count paramater available from Etsy response. Are there any products available?' );
+			wp_die( __( 'No product count paramater available from Etsy response. Are there any products available?', 'etsy_importer' ) );
 		}
 
 		// Get the total number of products so we can loop through each page
