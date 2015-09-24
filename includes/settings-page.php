@@ -112,6 +112,17 @@ class Etsy_Options_Admin {
 	}
 
 	/**
+	 * Defines theme option metabox overrides.
+	 * @since 1.4.0
+	 * @return array
+	 */
+	public function option_metabox_overrides() {
+		return (array) apply_filters( 'etsy_importer_option_metabox_overrides', array(
+			'save_button' => 'Save &amp; Import'
+		) );
+	}
+
+	/**
 	 * Retrieve the existing API Key from preivously registered settings
 	 * @return mixed Description text
 	 */
