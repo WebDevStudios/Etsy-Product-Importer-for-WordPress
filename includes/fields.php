@@ -21,7 +21,7 @@ function etsy_metaboxes( array $meta_boxes ) {
 
 	$etsy_metaboxes = new_cmb2_box( array(
 		'id'           => 'etsy_product_info',
-		'title' => __( 'Product Information', 'etsy' ),
+		'title' => __( 'Product Information', 'etsy_importer' ),
 		'object_types' => array( apply_filters( 'etsy_importer_custom_post_type_key', 'etsy_products' ), ), // Post type
 		'context' => 'normal',
 		'priority' => 'high',
@@ -29,31 +29,31 @@ function etsy_metaboxes( array $meta_boxes ) {
 	) );
 
 	$etsy_metaboxes->add_field( array(
-		'name' => __( 'Price', 'etsy' ),
+		'name' => __( 'Price', 'etsy_importer' ),
 		'id'   => $prefix . 'price',
 		'type' => 'text_small',
 	) );
 
 	$etsy_metaboxes->add_field( array(
-		'name' => __( 'Etsy Link', 'etsy' ),
+		'name' => __( 'Etsy Link', 'etsy_importer' ),
 		'id'   => $prefix . 'url',
 		'type' => 'text',
 	) );
 
 	$etsy_metaboxes->add_field( array(
-		'name' => __( 'Production Year', 'etsy' ),
+		'name' => __( 'Production Year', 'etsy_importer' ),
 		'id'   => $prefix . 'made',
 		'type' => 'text_medium',
 	) );
 
 	$etsy_metaboxes->add_field( array(
-		'name' => __( 'Made For', 'etsy' ),
+		'name' => __( 'Made For', 'etsy_importer' ),
 		'id'   => $prefix . 'made_for',
 		'type' => 'text_medium',
 	) );
 
 	$etsy_metaboxes->add_field( array(
-		'name'       => __( 'Etsy Product ID', 'etsy' ),
+		'name'       => __( 'Etsy Product ID', 'etsy_importer' ),
 		'id'         => $prefix . 'id',
 		'type'       => 'text_small',
 		'attributes' => array(
