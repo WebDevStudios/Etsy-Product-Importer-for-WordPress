@@ -366,7 +366,7 @@ class Etsy_Importer {
 		$response = $this->get_results_count();
 
 		if ( ! isset( $response->count ) ) {
-			wp_die( 'No count paramater available?' );
+			wp_die( 'No product count paramater available from Etsy response. Are there any products available?' );
 		}
 
 		// Get the total number of products so we can loop through each page
