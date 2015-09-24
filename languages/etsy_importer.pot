@@ -1,0 +1,244 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Etsy Importer\n"
+"POT-Creation-Date: 2015-09-24 01:44-0500\n"
+"PO-Revision-Date: 2015-09-24 01:27-0500\n"
+"Last-Translator: Michael Beckwith <michael.d.beckwith@gmail.com>\n"
+"Language-Team: Michael Beckwith <michael.d.beckwith@gmail.com>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: etsy-importer.php\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+"X-Poedit-SearchPathExcluded-1: CMB2\n"
+
+#: etsy-importer.php:206
+msgid "Product"
+msgstr ""
+
+#: etsy-importer.php:206
+msgid "Products"
+msgstr ""
+
+#: etsy-importer.php:225
+msgid "Add New"
+msgstr ""
+
+#: etsy-importer.php:226 etsy-importer.php:291
+#, php-format
+msgid "Add New %s"
+msgstr ""
+
+#: etsy-importer.php:227 etsy-importer.php:289
+#, php-format
+msgid "Edit %s"
+msgstr ""
+
+#: etsy-importer.php:228
+#, php-format
+msgid "New %s"
+msgstr ""
+
+#: etsy-importer.php:229
+#, php-format
+msgid "View %s"
+msgstr ""
+
+#: etsy-importer.php:230 etsy-importer.php:284
+#, php-format
+msgid "Search %s"
+msgstr ""
+
+#: etsy-importer.php:231
+#, php-format
+msgid "No %s found"
+msgstr ""
+
+#: etsy-importer.php:232
+#, php-format
+msgid "No %s found in Trash"
+msgstr ""
+
+#: etsy-importer.php:265
+msgid "Category"
+msgstr ""
+
+#: etsy-importer.php:265
+msgid "Categories"
+msgstr ""
+
+#: etsy-importer.php:266
+msgid "Tag"
+msgstr ""
+
+#: etsy-importer.php:266
+msgid "Tags"
+msgstr ""
+
+#: etsy-importer.php:285
+#, php-format
+msgid "Common %s"
+msgstr ""
+
+#: etsy-importer.php:286
+#, php-format
+msgid "All %s"
+msgstr ""
+
+#: etsy-importer.php:290
+#, php-format
+msgid "Update %s"
+msgstr ""
+
+#: etsy-importer.php:292
+#, php-format
+msgid "New %s Name"
+msgstr ""
+
+#: etsy-importer.php:293
+#, php-format
+msgid "Separate %s with commas"
+msgstr ""
+
+#: etsy-importer.php:294
+#, php-format
+msgid "Add or remove %s"
+msgstr ""
+
+#: etsy-importer.php:295
+#, php-format
+msgid "Choose from the most used %s"
+msgstr ""
+
+#: etsy-importer.php:373
+msgid ""
+"No product count paramater available from Etsy response. Are there any "
+"products available?"
+msgstr ""
+
+#: includes/fields.php:24
+msgid "Product Information"
+msgstr ""
+
+#: includes/fields.php:32
+msgid "Price"
+msgstr ""
+
+#: includes/fields.php:38
+msgid "Etsy Link"
+msgstr ""
+
+#: includes/fields.php:44
+msgid "Production Year"
+msgstr ""
+
+#: includes/fields.php:50
+msgid "Made For"
+msgstr ""
+
+#: includes/fields.php:56
+msgid "Etsy Product ID"
+msgstr ""
+
+#: includes/settings-page.php:38
+msgid "Etsy Importer Settings"
+msgstr ""
+
+#: includes/settings-page.php:43
+msgid "API Key"
+msgstr ""
+
+#: includes/settings-page.php:49
+msgid "Store ID"
+msgstr ""
+
+#: includes/settings-page.php:55
+msgid "Disable updating of post status on product import"
+msgstr ""
+
+#: includes/settings-page.php:56
+msgid ""
+"When left unchecked, any product in your Etsy shop which is no longer active "
+"will be automatically set to draft status; any product in your Etsy shop "
+"which was previously inactive and has become active will be automatically "
+"set to publish status."
+msgstr ""
+
+#: includes/settings-page.php:122
+msgid "Save &amp; Import"
+msgstr ""
+
+#: includes/settings-page.php:135
+msgid "Enter your API Key above."
+msgstr ""
+
+#: includes/settings-page.php:136
+#, php-format
+msgid ""
+"Need help? <a href=\"%s\" class=\"thickbox\">Click here</a> for a "
+"walkthrough on how to setup your Etsy Application."
+msgstr ""
+
+#: includes/settings-page.php:138
+#, php-format
+msgid ""
+"In order to import your products, you first need to register an application "
+"with Etsy.  <a href=\"%s\" target=\"_blank\">Click here</a> to begin "
+"registering your application.  You should see a screen similar to the image "
+"below:"
+msgstr ""
+
+#: includes/settings-page.php:140
+msgid ""
+"Once you have created your app, click \"Apps You've Made\" in the sidebar "
+"and select your new app.  On the app detail page, copy the value in the "
+"Keystring input field.  This is your API Key."
+msgstr ""
+
+#: includes/settings-page.php:157
+msgid "Enter your Store ID above."
+msgstr ""
+
+#: includes/settings-page.php:158
+#, php-format
+msgid ""
+"Need help? <a href=\"%s\" class=\"thickbox\">Click here</a> for a "
+"walkthrough on how to find your Etsy store ID."
+msgstr ""
+
+#: includes/settings-page.php:160
+msgid ""
+"Visit your Etsy store's front page.  View the page source and copy the "
+"number in the URL of the \"al:ios:url\" property.  This is your shop ID."
+msgstr ""
+
+#: includes/shortcodes.php:104
+msgid "Continue reading"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Etsy Importer"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+#. Author URI of the plugin/theme
+msgid "http://www.webdevstudios.com"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Import your Etsy store's products as posts in a custom post type."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "WebDevStudios"
+msgstr ""

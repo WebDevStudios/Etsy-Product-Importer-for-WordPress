@@ -5,11 +5,10 @@ Plugin URI: http://www.webdevstudios.com
 Description: Import your Etsy store's products as posts in a custom post type.
 Author: WebDevStudios
 Author URI: http://www.webdevstudios.com
-Version: 1.3.2
+Version: 1.4.0
 License: GPLv2
 */
 
-// Define the base plugin directory for use throughout the plugin
 define( 'PLUGIN_BASE_DIR', plugins_url( '/', __FILE__ ) );
 
 /**
@@ -20,7 +19,7 @@ define( 'PLUGIN_BASE_DIR', plugins_url( '/', __FILE__ ) );
  */
 class Etsy_Importer {
 
-	const VERSION = '1.3.2';
+	const VERSION = '1.4.0';
 
 	// A single instance of this class.
 	public static $instance  = null;
@@ -44,9 +43,9 @@ class Etsy_Importer {
 	public function __construct() {
 
 		// Include CMB2
-		if ( file_exists( __DIR__ . '/cmb2/init.php' ) ) {
+		if ( file_exists( dirname( __FILE__ ) . '/cmb2/init.php' ) ) {
 			require_once 'cmb2/init.php';
-		} elseif ( file_exists( __DIR__ . '/CMB2/init.php' ) ) {
+		} elseif ( file_exists( dirname( __FILE__ ) . '/CMB2/init.php' ) ) {
 			echo 'hey buddy';
 			require_once 'CMB2/init.php';
 		}
@@ -263,8 +262,8 @@ class Etsy_Importer {
 	 */
 	public function taxonomies() {
 
-		$this->taxonomy( __( 'Category' ), __( 'Categories' ), $this->category_key(), 'category', array( $this->post_type_key() ), true );
-		$this->taxonomy( __( 'Tag' ), __( 'Tags' ), $this->tag_key(), 'tag', array( $this->post_type_key() ), true );
+		$this->taxonomy( __( 'Category', 'etsy_importer' ), __( 'Categories', 'etsy_importer' ), $this->category_key(), 'category', array( $this->post_type_key() ), true );
+		$this->taxonomy( __( 'Tag', 'etsy_importer' ), __( 'Tags', 'etsy_importer' ), $this->tag_key(), 'tag', array( $this->post_type_key() ), true );
 	}
 
 	/**
@@ -332,7 +331,11 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Grab the image ID from its URL
+	 * Grab the image ID from its URL.
+	 *
+	 * @param string $image_src
+	 *
+	 * @return int $id
 	 */
 	public function get_attachment_id_from_src( $image_src ){
 		global $wpdb;
@@ -367,7 +370,7 @@ class Etsy_Importer {
 		$response = $this->get_results_count();
 
 		if ( ! isset( $response->count ) ) {
-			wp_die( 'No count paramater available?' );
+			wp_die( __( 'No product count paramater available from Etsy response. Are there any products available?', 'etsy_importer' ) );
 		}
 
 		// Get the total number of products so we can loop through each page
@@ -384,7 +387,11 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Get our paged results
+	 * Get our paged results.
+	 *
+	 * @param int $paged_total How many more to available to fetch for current page.
+	 * @param int $post_limit  Maximum amount to fetch for this page.
+	 * @param int $post_offset Where to start with the fetching of more results.
 	 */
 	public function get_page_results( $paged_total, $post_limit, $post_offset ) {
 
@@ -405,7 +412,9 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Get each product's data
+	 * Get each product's data.
+	 *
+	 * @param object $paged_response API result data.
 	 */
 	public function import_each_product( $paged_response ) {
 
@@ -470,7 +479,11 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Setup our post args
+	 * Setup our post args.
+	 *
+	 * @param object $product
+	 *
+	 * @return array
 	 */
 	public function setup_post_args( $product ) {
 
@@ -487,6 +500,9 @@ class Etsy_Importer {
 
 	/**
 	 * Import the product listing ID as post meta
+	 *
+	 * @param int    $post_id ID of the post to update.
+	 * @param object $product
 	 */
 	public function import_product_listing_id( $post_id, $product ) {
 
@@ -496,7 +512,10 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Add/Update the product's post meta
+	 * Add/Update the product's post meta.
+	 *
+	 * @param int    $post_id ID of the post to update.
+	 * @param object $product
 	 */
 	public function update_product_post_meta( $post_id, $product ) {
 
@@ -523,7 +542,10 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Attach the images to the product post
+	 * Attach the images to the product post.
+	 *
+	 * @param int    $post_id ID of the post to add images to.
+	 * @param object $response
 	 */
 	public function add_images_to_product_post( $post_id, $response ) {
 
@@ -579,7 +601,12 @@ class Etsy_Importer {
 
 
 	/**
-	 * Get paged results
+	 * Get paged results.
+	 *
+	 * @param int $post_limit
+	 * @param int $post_offset
+	 *
+	 * @return object
 	 */
 	public function get_paged_results( $post_limit, $post_offset ) {
 
@@ -590,7 +617,11 @@ class Etsy_Importer {
 
 
 	/**
-	 * Get the product's images
+	 * Get the product's images.
+	 *
+	 * @param object $product
+	 *
+	 * @return object
 	 */
 	public function get_product_images( $product ) {
 
@@ -601,7 +632,11 @@ class Etsy_Importer {
 
 	/**
 	 * Get results generically for a url
-	 * todo possibly better handline for wp_die in some instances
+	 * @todo possibly better handline for wp_die in some instances
+	 *
+	 * @param string $url
+	 *
+	 * @return object
 	 */
 	public function get_results( $url ) {
 
@@ -622,7 +657,9 @@ class Etsy_Importer {
 
 	/**
 	 * Update our post status to draft mode if it is
-	 * no longer in the Active state on Etsy
+	 * no longer in the Active state on Etsy.
+	 *
+	 * @param object $paged_response
 	 */
 	public function set_inactive_posts_to_draft( $paged_response ) {
 

@@ -29,6 +29,7 @@ class Etsy_Options_Admin {
 	/**
 	 * Constructor
 	 * @since 0.1.0
+	 * @param string $post_type Post type to use regarding our settings page.
 	 */
 	public function __construct( $post_type ) {
 		$this->post_type = $post_type;
@@ -92,7 +93,7 @@ class Etsy_Options_Admin {
 		?>
 		<div class="wrap cmb2_options_page <?php echo $this->key; ?>">
 			<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
-			<?php cmb2_metabox_form( $this->option_metabox(), $this->key ); ?>
+			<?php cmb2_metabox_form( $this->option_metabox(), $this->key, $this->option_metabox_overrides() ); ?>
 		</div>
 		<?php
 	}
@@ -109,6 +110,17 @@ class Etsy_Options_Admin {
 			'show_names' => true,
 			'fields'     => $this->fields,
 		);
+	}
+
+	/**
+	 * Defines theme option metabox overrides.
+	 * @since 1.4.0
+	 * @return array
+	 */
+	public function option_metabox_overrides() {
+		return (array) apply_filters( 'etsy_importer_option_metabox_overrides', array(
+			'save_button' => __( 'Save &amp; Import', 'etsy_importer' )
+		) );
 	}
 
 	/**
@@ -157,6 +169,7 @@ class Etsy_Options_Admin {
 	 * @since  0.1.0
 	 * @param  string  $field Field to retrieve
 	 * @return mixed          Field value or exception is thrown
+	 * @throws Exception
 	 */
 	public function __get( $field ) {
 

@@ -10,9 +10,14 @@ class Etsy_Importer_Shortcodes {
 	}
 
 	/**
-	 * Add a shortcode to display the product title
+	 * Add a shortcode to display the product title.
 	 *
 	 * @since 1.0
+	 *
+	 * @param array       $atts Array of shortcode attributes.
+	 * @param string|null $content
+	 *
+	 * @return string $output
 	 */
 	public function product_link_shortcode( $atts, $content = null ) {
 
@@ -23,10 +28,8 @@ class Etsy_Importer_Shortcodes {
 			'title'		=> '',
 		), $atts, 'product_link' );
 
-		extract( $atts );
-
 		// Get our post content
-		$product = get_post( $id );
+		$product = get_post( $atts['id'] );
 
 		// If there is no product found, stop
 		if ( ! $product ) {
@@ -34,19 +37,19 @@ class Etsy_Importer_Shortcodes {
 		}
 
 		// Get our post or external link
-		if ( 'yes' == $external || 'true' == $external ) {
+		if ( 'yes' == $atts['external'] || 'true' == $atts['external'] ) {
 
-			$link 	= esc_url( get_post_meta( $id, '_etsy_product_url', true ) );
+			$link 	= esc_url( get_post_meta( $atts['id'], '_etsy_product_url', true ) );
 			$target	= '_blank';
 
 		} else {
 
-			$link 	= get_permalink( $id );
+			$link 	= get_permalink( $atts['id'] );
 			$target	= '_self';
 		}
 
 		// Get our link title
-		$title = ( $title ) ? $title : get_the_title( $id );
+		$title = ( $atts['title'] ) ? $atts['title'] : get_the_title( $atts['id'] );
 
 		// Assume zer is nussing
 		$output = '';
@@ -60,9 +63,14 @@ class Etsy_Importer_Shortcodes {
 	}
 
 	/**
-	 * Add a shortcode to display the product content
+	 * Add a shortcode to display the product content.
 	 *
 	 * @since 1.0
+	 *
+	 * @param array       $atts Array of shortcode attributes.
+	 * @param string|null $content
+	 *
+	 * @return string
 	 */
 	public function product_content_shortcode( $atts, $content = null ) {
 
@@ -72,10 +80,8 @@ class Etsy_Importer_Shortcodes {
 			'length'	=> '',
 		), $atts, 'product_content' );
 
-		extract( $atts );
-
 		// Get our post content
-		$product = get_post( $id );
+		$product = get_post( $atts['id'] );
 
 		// If there is no product found, stop
 		if ( ! $product ) {
@@ -91,11 +97,11 @@ class Etsy_Importer_Shortcodes {
 		if ( $content ) {
 
 			// If we have a length set, apply it
-			if ( '' !== $length ) {
+			if ( '' !== $atts['length'] ) {
 
-				$excerpt_length = $length;
+				$excerpt_length = $atts['length'];
 				$excerpt_more   = '&hellip;';
-				$output        .= '<p>' . wp_trim_words( $content, $excerpt_length, $excerpt_more ) . ' <a href="' . get_permalink( $id ) . '" class="more-link">' . __( 'Continue reading', 'etsy_importer' ) . ' <span class="screen-reader-text">' . $product->post_title . '</span></a></p>';
+				$output        .= '<p>' . wp_trim_words( $content, $excerpt_length, $excerpt_more ) . ' <a href="' . get_permalink( $atts['id'] ) . '" class="more-link">' . __( 'Continue reading', 'etsy_importer' ) . ' <span class="screen-reader-text">' . $product->post_title . '</span></a></p>';
 
 			} else {
 
@@ -108,22 +114,25 @@ class Etsy_Importer_Shortcodes {
 	}
 
 	/**
-	 * Add a shortcode to display the product images
+	 * Add a shortcode to display the product images.
 	 *
 	 * @since 1.0
+	 *
+	 * @param array       $atts Array of shortcode attributes.
+	 * @param string|null $content
+	 *
+	 * @return string
 	 */
 	public function product_images_shortcode( $atts, $content = null ) {
 
 		// Get our shortcode attributes
 		$atts = shortcode_atts( array(
 			'id'	=> '',
-			'size'	=> '',
+			'size'	=> 'thumbnail',
 		), $atts, 'product_images' );
 
-		extract( $atts );
-
 		// Get our post content
-		$product = get_post( $id );
+		$product = get_post( $atts['id'] );
 
 		// If there is no product found, stop
 		if ( ! $product ) {
@@ -133,13 +142,13 @@ class Etsy_Importer_Shortcodes {
 		$img_args = apply_filters( 'etsy_importer_product_images_shortcode_args', array(
 			'post_type'			=> 'attachment',
 			'posts_per_page'	=> 500, // sanity
-			'post_parent'		=> $id,
+			'post_parent'		=> $atts['id'],
 		), $atts );
 
 		// Get our post images
 		$images = get_posts( $img_args );
 
-		$thumb_size = apply_filters( 'etsy_importer_product_images_shortcode_thumb_size', 'thumbnail', $atts );
+		$thumb_size = apply_filters( 'etsy_importer_product_images_shortcode_thumb_size', $atts['size'], $atts );
 
 		// Assume zer is nussing
 		$output = '';
@@ -157,7 +166,7 @@ class Etsy_Importer_Shortcodes {
 				$image_full 	= wp_get_attachment_image_src( $image_id, 'full' );
 
 				// Display the image
-				$output .= '<a href="' . $image_full[0]. '" class="thickbox" rel="gallery-' . $id . '">' . $image_thumb . '</a>';
+				$output .= '<a href="' . $image_full[0]. '" class="thickbox" rel="gallery-' . $atts['id'] . '">' . $image_thumb . '</a>';
 
 			}
 		}

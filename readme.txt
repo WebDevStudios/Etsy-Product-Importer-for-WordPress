@@ -48,7 +48,7 @@ Display your product's images in a Thickbox gallery using WordPress' built-in Th
 
 1. Upload the 'etsy-importer' directory to the '/wp-content/plugins/' directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
-3. Visit the plugin settings page ('/wp-admin/options-general.php?page=etsy-importer/etsy-importer.php') to begin your import.
+3. Visit the plugin settings page ('/wp-admin/edit.php?post_type=etsy_products&page=etsy_options') to begin your import.
 4. Enter your Etsy application API Key and your Etsy shop ID and hit the "Save Changes" button to save your information.
 5. Hit the "Import Products" button to begin importing your products.
 
@@ -227,6 +227,18 @@ Usage:
 add_filter( 'etsy_importer_product_import_insert_args', 'your_project_modify_etsy_importer_product_import_insert_args', 10, 2 );`
 
 == Changelog ==
+
+= 1.4.0 =
+* Fix: hopeful solution for occasional "Invalid header" issue.
+* Fix: PHP Magic Constant change for PHP 5.2 compatibility.
+* Fix: Amend error message to be more informative to user.
+* Fix: Amend settings save button text to indicate saving will process product imports.
+* Enhancement: Improvements to PHPDOcs for developers.
+* Fix: Remove usage of PHP extract function in shortcodes.
+* Fix: Match metabox field definitions to current CMB2 usage.
+* Enhancement: Highlight store ID to use in screenshot.
+* Fix: Update settings page URL in readme.txt
+* Updated internationalization files.
 
 = 1.3.2 =
 * With this update, you will need to save your settings to reimport your products and add the product ID as post meta.

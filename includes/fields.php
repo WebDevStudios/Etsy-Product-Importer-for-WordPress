@@ -19,47 +19,47 @@ function etsy_metaboxes( array $meta_boxes ) {
 	// Start with an underscore to hide fields from custom fields list
 	$prefix = '_etsy_product_';
 
-	$meta_boxes['etsy_metaboxes'] = array(
+	$etsy_metaboxes = new_cmb2_box( array(
 		'id'           => 'etsy_product_info',
-		'title'        => __( 'Product Information', 'etsy' ),
+		'title' => __( 'Product Information', 'etsy_importer' ),
 		'object_types' => array( apply_filters( 'etsy_importer_custom_post_type_key', 'etsy_products' ), ), // Post type
-		'context'      => 'normal',
-		'priority'     => 'high',
-		'show_names'   => true, // Show field names on the left
-		'fields'       => array(
-			array(
-				'name' => __( 'Price', 'etsy' ),
-				'id'   => $prefix . 'price',
-				'type' => 'text_small',
-			),
-			array(
-				'name' => __( 'Etsy Link', 'etsy' ),
-				'id'   => $prefix . 'url',
-				'type' => 'text',
-			),
-			array(
-				'name' => __( 'Production Year', 'etsy' ),
-				'id'   => $prefix . 'made',
-				'type' => 'text_medium',
-			),
-			array(
-				'name' => __( 'Made For', 'etsy' ),
-				'id'   => $prefix . 'made_for',
-				'type' => 'text_medium',
-			),
-			array(
-				'name'         => __( 'Etsy Product ID', 'etsy' ),
-				'id'           => $prefix . 'id',
-				'type'         => 'text_small',
-				'attributes'   => array(
-					'disabled' => 'disabled'
-				)
-			),
+		'context' => 'normal',
+		'priority' => 'high',
+		'show_names' => true, // Show field names on the left
+	) );
+
+	$etsy_metaboxes->add_field( array(
+		'name' => __( 'Price', 'etsy_importer' ),
+		'id'   => $prefix . 'price',
+		'type' => 'text_small',
+	) );
+
+	$etsy_metaboxes->add_field( array(
+		'name' => __( 'Etsy Link', 'etsy_importer' ),
+		'id'   => $prefix . 'url',
+		'type' => 'text',
+	) );
+
+	$etsy_metaboxes->add_field( array(
+		'name' => __( 'Production Year', 'etsy_importer' ),
+		'id'   => $prefix . 'made',
+		'type' => 'text_medium',
+	) );
+
+	$etsy_metaboxes->add_field( array(
+		'name' => __( 'Made For', 'etsy_importer' ),
+		'id'   => $prefix . 'made_for',
+		'type' => 'text_medium',
+	) );
+
+	$etsy_metaboxes->add_field( array(
+		'name'       => __( 'Etsy Product ID', 'etsy_importer' ),
+		'id'         => $prefix . 'id',
+		'type'       => 'text_small',
+		'attributes' => array(
+			'disabled' => 'disabled'
 		)
-	);
+	) );
 
-	// Add other metaboxes as needed
-
-	return $meta_boxes;
 }
 add_filter( 'cmb2_meta_boxes', 'etsy_metaboxes' );
