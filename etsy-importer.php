@@ -500,6 +500,9 @@ class Etsy_Importer {
 
 	/**
 	 * Import the product listing ID as post meta
+	 *
+	 * @param int    $post_id ID of the post to update.
+	 * @param object $product
 	 */
 	public function import_product_listing_id( $post_id, $product ) {
 
