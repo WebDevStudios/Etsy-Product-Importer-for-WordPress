@@ -9,7 +9,6 @@ Version: 1.3.2
 License: GPLv2
 */
 
-// Define the base plugin directory for use throughout the plugin
 define( 'PLUGIN_BASE_DIR', plugins_url( '/', __FILE__ ) );
 
 /**
