@@ -48,7 +48,7 @@ Display your product's images in a Thickbox gallery using WordPress' built-in Th
 
 1. Upload the 'etsy-importer' directory to the '/wp-content/plugins/' directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
-3. Visit the plugin settings page ('/wp-admin/options-general.php?page=etsy-importer/etsy-importer.php') to begin your import.
+3. Visit the plugin settings page ('/wp-admin/edit.php?post_type=etsy_products&page=etsy_options') to begin your import.
 4. Enter your Etsy application API Key and your Etsy shop ID and hit the "Save Changes" button to save your information.
 5. Hit the "Import Products" button to begin importing your products.
 
