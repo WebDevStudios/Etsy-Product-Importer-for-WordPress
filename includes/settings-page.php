@@ -168,6 +168,7 @@ class Etsy_Options_Admin {
 	 * @since  0.1.0
 	 * @param  string  $field Field to retrieve
 	 * @return mixed          Field value or exception is thrown
+	 * @throws Exception
 	 */
 	public function __get( $field ) {
 
