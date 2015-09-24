@@ -92,7 +92,7 @@ class Etsy_Options_Admin {
 		?>
 		<div class="wrap cmb2_options_page <?php echo $this->key; ?>">
 			<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
-			<?php cmb2_metabox_form( $this->option_metabox(), $this->key ); ?>
+			<?php cmb2_metabox_form( $this->option_metabox(), $this->key, $this->option_metabox_overrides() ); ?>
 		</div>
 		<?php
 	}
