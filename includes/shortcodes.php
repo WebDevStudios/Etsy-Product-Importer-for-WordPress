@@ -10,9 +10,14 @@ class Etsy_Importer_Shortcodes {
 	}
 
 	/**
-	 * Add a shortcode to display the product title
+	 * Add a shortcode to display the product title.
 	 *
 	 * @since 1.0
+	 *
+	 * @param array       $atts Array of shortcode attributes.
+	 * @param string|null $content
+	 *
+	 * @return string $output
 	 */
 	public function product_link_shortcode( $atts, $content = null ) {
 
@@ -60,9 +65,14 @@ class Etsy_Importer_Shortcodes {
 	}
 
 	/**
-	 * Add a shortcode to display the product content
+	 * Add a shortcode to display the product content.
 	 *
 	 * @since 1.0
+	 *
+	 * @param array       $atts Array of shortcode attributes.
+	 * @param string|null $content
+	 *
+	 * @return string
 	 */
 	public function product_content_shortcode( $atts, $content = null ) {
 
@@ -108,9 +118,14 @@ class Etsy_Importer_Shortcodes {
 	}
 
 	/**
-	 * Add a shortcode to display the product images
+	 * Add a shortcode to display the product images.
 	 *
 	 * @since 1.0
+	 *
+	 * @param array       $atts Array of shortcode attributes.
+	 * @param string|null $content
+	 *
+	 * @return string
 	 */
 	public function product_images_shortcode( $atts, $content = null ) {
 
