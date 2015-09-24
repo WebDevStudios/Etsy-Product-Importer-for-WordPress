@@ -43,9 +43,9 @@ class Etsy_Importer {
 	public function __construct() {
 
 		// Include CMB2
-		if ( file_exists( __DIR__ . '/cmb2/init.php' ) ) {
+		if ( file_exists( dirname( __FILE__ ) . '/cmb2/init.php' ) ) {
 			require_once 'cmb2/init.php';
-		} elseif ( file_exists( __DIR__ . '/CMB2/init.php' ) ) {
+		} elseif ( file_exists( dirname( __FILE__ ) . '/CMB2/init.php' ) ) {
 			echo 'hey buddy';
 			require_once 'CMB2/init.php';
 		}
