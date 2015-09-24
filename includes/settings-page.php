@@ -119,7 +119,7 @@ class Etsy_Options_Admin {
 	 */
 	public function option_metabox_overrides() {
 		return (array) apply_filters( 'etsy_importer_option_metabox_overrides', array(
-			'save_button' => 'Save &amp; Import'
+			'save_button' => __( 'Save &amp; Import', 'etsy_importer' )
 		) );
 	}
 
