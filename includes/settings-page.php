@@ -29,6 +29,7 @@ class Etsy_Options_Admin {
 	/**
 	 * Constructor
 	 * @since 0.1.0
+	 * @param string $post_type Post type to use regarding our settings page.
 	 */
 	public function __construct( $post_type ) {
 		$this->post_type = $post_type;
