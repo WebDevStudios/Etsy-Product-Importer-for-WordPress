@@ -29,6 +29,8 @@ The Etsy Importer will not only import your products but will also:
 
 Not only do we import your products, but we add some shortcodes to help you integrate your products into blog posts.
 
+[Pluginize](https://pluginize.com/?utm_source=etsy-importer&utm_medium=text&utm_campaign=wporg) was launched in 2016 by [WebDevStudios](https://webdevstudios.com/) to promote, support, and house all of their [WordPress products](https://pluginize.com/shop/?utm_source=etsy-importer&utm_medium=text&utm_campaign=wporg). Pluginize is not only creating new products for WordPress all the time, but also provides [ongoing support and development for WordPress community favorites like CPTUI](https://wordpress.org/plugins/custom-post-type-ui/), [CMB2](https://wordpress.org/plugins/cmb2/), and more.
+
 = Shortcodes =
 
 Display a link to your product - either as a link to the post within your site using the post title as the link text:
