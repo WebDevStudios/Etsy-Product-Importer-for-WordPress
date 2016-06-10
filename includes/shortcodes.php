@@ -105,7 +105,7 @@ class Etsy_Importer_Shortcodes {
 
 				$excerpt_length = $atts['length'];
 				$excerpt_more   = '&hellip;';
-				$output        .= '<p>' . wp_trim_words( $content, $excerpt_length, $excerpt_more ) . ' <a href="' . get_permalink( $atts['id'] ) . '" class="more-link">' . __( 'Continue reading', 'etsy_importer' ) . ' <span class="screen-reader-text">' . $product->post_title . '</span></a></p>';
+				$output        .= '<p>' . wp_trim_words( $content, $excerpt_length, $excerpt_more ) . ' <a href="' . get_permalink( $atts['id'] ) . '" class="more-link">' . esc_html__( 'Continue reading', 'etsy_importer' ) . ' <span class="screen-reader-text">' . $product->post_title . '</span></a></p>';
 
 			} else {
 
@@ -176,5 +176,4 @@ class Etsy_Importer_Shortcodes {
 
 		return apply_filters( 'etsy_importer_product_images_shortcode', $output, $atts );
 	}
-
 }
