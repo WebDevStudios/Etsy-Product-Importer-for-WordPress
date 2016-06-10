@@ -1,5 +1,16 @@
 <?php
+/**
+ * Include and setup options page.
+ *
+ * @category Etsy Importer
+ * @package  Options
+ * @license  http://www.opensource.org/licenses/gpl-license.php GPL v2.0 (or later)
+ * @link     https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress
+ */
 
+/**
+ * Set up our options page.
+ */
 class Etsy_Options_Admin {
 
 	/**
