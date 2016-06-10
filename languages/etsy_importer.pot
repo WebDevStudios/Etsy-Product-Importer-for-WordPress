@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Etsy Importer\n"
-"POT-Creation-Date: 2016-06-10 02:05-0500\n"
+"POT-Creation-Date: 2016-06-10 02:22-0500\n"
 "PO-Revision-Date: 2015-09-24 01:27-0500\n"
 "Last-Translator: Michael Beckwith <michael.d.beckwith@gmail.com>\n"
 "Language-Team: Michael Beckwith <michael.d.beckwith@gmail.com>\n"
@@ -22,105 +22,105 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 "X-Poedit-SearchPathExcluded-1: CMB2\n"
 
-#: etsy-importer.php:210
+#: etsy-importer.php:209
 msgid "Product"
 msgstr ""
 
-#: etsy-importer.php:210
+#: etsy-importer.php:209
 msgid "Products"
 msgstr ""
 
-#: etsy-importer.php:230
+#: etsy-importer.php:229
 msgid "Add New"
 msgstr ""
 
-#: etsy-importer.php:231 etsy-importer.php:298
+#: etsy-importer.php:230 etsy-importer.php:297
 #, php-format
 msgid "Add New %s"
 msgstr ""
 
-#: etsy-importer.php:232 etsy-importer.php:296
+#: etsy-importer.php:231 etsy-importer.php:295
 #, php-format
 msgid "Edit %s"
 msgstr ""
 
-#: etsy-importer.php:233
+#: etsy-importer.php:232
 #, php-format
 msgid "New %s"
 msgstr ""
 
-#: etsy-importer.php:234
+#: etsy-importer.php:233
 #, php-format
 msgid "View %s"
 msgstr ""
 
-#: etsy-importer.php:235 etsy-importer.php:291
+#: etsy-importer.php:234 etsy-importer.php:290
 #, php-format
 msgid "Search %s"
 msgstr ""
 
-#: etsy-importer.php:236
+#: etsy-importer.php:235
 #, php-format
 msgid "No %s found"
 msgstr ""
 
-#: etsy-importer.php:237
+#: etsy-importer.php:236
 #, php-format
 msgid "No %s found in Trash"
 msgstr ""
 
-#: etsy-importer.php:271
+#: etsy-importer.php:270
 msgid "Category"
 msgstr ""
 
-#: etsy-importer.php:271
+#: etsy-importer.php:270
 msgid "Categories"
 msgstr ""
 
-#: etsy-importer.php:272
+#: etsy-importer.php:271
 msgid "Tag"
 msgstr ""
 
-#: etsy-importer.php:272
+#: etsy-importer.php:271
 msgid "Tags"
 msgstr ""
 
-#: etsy-importer.php:292
+#: etsy-importer.php:291
 #, php-format
 msgid "Common %s"
 msgstr ""
 
-#: etsy-importer.php:293
+#: etsy-importer.php:292
 #, php-format
 msgid "All %s"
 msgstr ""
 
-#: etsy-importer.php:297
+#: etsy-importer.php:296
 #, php-format
 msgid "Update %s"
 msgstr ""
 
-#: etsy-importer.php:299
+#: etsy-importer.php:298
 #, php-format
 msgid "New %s Name"
 msgstr ""
 
-#: etsy-importer.php:300
+#: etsy-importer.php:299
 #, php-format
 msgid "Separate %s with commas"
 msgstr ""
 
-#: etsy-importer.php:301
+#: etsy-importer.php:300
 #, php-format
 msgid "Add or remove %s"
 msgstr ""
 
-#: etsy-importer.php:302
+#: etsy-importer.php:301
 #, php-format
 msgid "Choose from the most used %s"
 msgstr ""
 
-#: etsy-importer.php:380
+#: etsy-importer.php:379
 msgid ""
 "No product count paramater available from Etsy response. Are there any "
 "products available?"
