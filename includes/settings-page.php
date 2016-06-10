@@ -49,19 +49,19 @@ class Etsy_Options_Admin {
 				'name' => __( 'API Key', 'etsy_importer' ),
 				'desc' => $this->api_key_description(),
 				'id'   => 'etsy_importer_api_key',
-				'type' => 'text'
+				'type' => 'text',
 			),
 			array(
 				'name' => __( 'Store ID', 'etsy_importer' ),
 				'desc' => $this->store_id_description(),
 				'id'   => 'etsy_importer_store_id',
-				'type' => 'text'
+				'type' => 'text',
 			),
 			array(
 				'name' => __( 'Disable updating of post status on product import', 'etsy_importer' ),
 				'desc' => __( 'When left unchecked, any product in your Etsy shop which is no longer active will be automatically set to draft status; any product in your Etsy shop which was previously inactive and has become active will be automatically set to publish status.', 'etsy_importer' ),
 				'id'   => 'etsy_importer_status_checkbox',
-				'type' => 'checkbox'
+				'type' => 'checkbox',
 			),
 		);
 	}
@@ -118,7 +118,7 @@ class Etsy_Options_Admin {
 	public function option_metabox() {
 		return array(
 			'id'         => 'option_metabox',
-			'show_on'    => array( 'key' => 'options-page', 'value' => array( $this->key, ), ),
+			'show_on'    => array( 'key' => 'options-page', 'value' => array( $this->key ) ),
 			'show_names' => true,
 			'fields'     => $this->fields,
 		);
@@ -133,7 +133,7 @@ class Etsy_Options_Admin {
 	 */
 	public function option_metabox_overrides() {
 		return (array) apply_filters( 'etsy_importer_option_metabox_overrides', array(
-			'save_button' => __( 'Save &amp; Import', 'etsy_importer' )
+			'save_button' => __( 'Save &amp; Import', 'etsy_importer' ),
 		) );
 	}
 
