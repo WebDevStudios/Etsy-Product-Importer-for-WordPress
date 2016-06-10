@@ -28,9 +28,9 @@ class Etsy_Importer_Shortcodes {
 
 		// Get our shortcode attributes.
 		$atts = shortcode_atts( array(
-			'id'		=> '',
-			'external'	=> '',
-			'title'		=> '',
+			'id'       => '',
+			'external' => '',
+			'title'    => '',
 		), $atts, 'product_link' );
 
 		// Get our post content.
@@ -44,13 +44,13 @@ class Etsy_Importer_Shortcodes {
 		// Get our post or external link.
 		if ( 'yes' == $atts['external'] || 'true' == $atts['external'] ) {
 
-			$link 	= esc_url( get_post_meta( $atts['id'], '_etsy_product_url', true ) );
-			$target	= '_blank';
+			$link   = esc_url( get_post_meta( $atts['id'], '_etsy_product_url', true ) );
+			$target = '_blank';
 
 		} else {
 
-			$link 	= get_permalink( $atts['id'] );
-			$target	= '_self';
+			$link   = get_permalink( $atts['id'] );
+			$target = '_self';
 		}
 
 		// Get our link title.
@@ -80,8 +80,8 @@ class Etsy_Importer_Shortcodes {
 
 		// Get our shortcode attributes.
 		$atts = shortcode_atts( array(
-			'id'		=> '',
-			'length'	=> '',
+			'id'     => '',
+			'length' => '',
 		), $atts, 'product_content' );
 
 		// Get our post content.
@@ -130,8 +130,8 @@ class Etsy_Importer_Shortcodes {
 
 		// Get our shortcode attributes.
 		$atts = shortcode_atts( array(
-			'id'	=> '',
-			'size'	=> 'thumbnail',
+			'id'   => '',
+			'size' => 'thumbnail',
 		), $atts, 'product_images' );
 
 		// Get our post content.
@@ -139,13 +139,13 @@ class Etsy_Importer_Shortcodes {
 
 		// If there is no product found, stop.
 		if ( ! $product ) {
-			return;
+			return '';
 		}
 
 		$img_args = apply_filters( 'etsy_importer_product_images_shortcode_args', array(
-			'post_type'			=> 'attachment',
-			'posts_per_page'	=> 500, // sanity
-			'post_parent'		=> $atts['id'],
+			'post_type'      => 'attachment',
+			'posts_per_page' => 500, // Sanity.
+			'post_parent'    => $atts['id'],
 		), $atts );
 
 		// Get our post images.
