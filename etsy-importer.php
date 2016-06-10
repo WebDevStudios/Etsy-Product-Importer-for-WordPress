@@ -344,7 +344,7 @@ class Etsy_Importer {
 	 * @param string $image_src Image URL.
 	 * @return int $id
 	 */
-	public function get_attachment_id_from_src( $image_src ){
+	public function get_attachment_id_from_src( $image_src ) {
 		global $wpdb;
 
 		$query = "SELECT ID FROM {$wpdb->posts} WHERE guid='$image_src'";
