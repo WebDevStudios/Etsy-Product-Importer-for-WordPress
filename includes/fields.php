@@ -54,8 +54,8 @@ function etsy_metaboxes() {
 		'id'         => $prefix . 'id',
 		'type'       => 'text_small',
 		'attributes' => array(
-			'disabled' => 'disabled'
-		)
+			'disabled' => 'disabled',
+		),
 	) );
 
 }
