@@ -11,7 +11,7 @@
 /**
  * Define the metabox and field configurations.
  */
-function etsy_metaboxes( array $meta_boxes ) {
+function etsy_metaboxes() {
 
 	// Start with an underscore to hide fields from custom fields list.
 	$prefix = '_etsy_product_';
