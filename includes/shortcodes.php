@@ -38,7 +38,7 @@ class Etsy_Importer_Shortcodes {
 
 		// If there is no product found, stop.
 		if ( ! $product ) {
-			return;
+			return '';
 		}
 
 		// Get our post or external link.
@@ -89,7 +89,7 @@ class Etsy_Importer_Shortcodes {
 
 		// If there is no product found, stop.
 		if ( ! $product ) {
-			return;
+			return '';
 		}
 
 		$content = wpautop( $product->post_content );
