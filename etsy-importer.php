@@ -48,7 +48,6 @@ class Etsy_Importer {
 		if ( file_exists( dirname( __FILE__ ) . '/cmb2/init.php' ) ) {
 			require_once 'cmb2/init.php';
 		} elseif ( file_exists( dirname( __FILE__ ) . '/CMB2/init.php' ) ) {
-			echo 'hey buddy';
 			require_once 'CMB2/init.php';
 		}
 
