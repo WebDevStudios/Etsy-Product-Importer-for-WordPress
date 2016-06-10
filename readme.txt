@@ -235,11 +235,11 @@ add_filter( 'etsy_importer_product_import_insert_args', 'your_project_modify_ets
 * Fix: PHP Magic Constant change for PHP 5.2 compatibility.
 * Fix: Amend error message to be more informative to user.
 * Fix: Amend settings save button text to indicate saving will process product imports.
-* Enhancement: Improvements to PHPDOcs for developers.
 * Fix: Remove usage of PHP extract function in shortcodes.
 * Fix: Match metabox field definitions to current CMB2 usage.
-* Enhancement: Highlight store ID to use in screenshot.
 * Fix: Update settings page URL in readme.txt
+* Enhancement: Improvements to PHPDocs for developers.
+* Enhancement: Highlight store ID to use in screenshot.
 * Updated internationalization files.
 
 = 1.3.2 =
