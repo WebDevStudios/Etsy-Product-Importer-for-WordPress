@@ -1,4 +1,12 @@
 <?php
+/**
+ * Include and setup shortcodes.
+ *
+ * @category Etsy Importer
+ * @package  Shortcodes
+ * @license  http://www.opensource.org/licenses/gpl-license.php GPL v2.0 (or later)
+ * @link     https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress
+ */
 
 /**
  * Register our shortcodes.
