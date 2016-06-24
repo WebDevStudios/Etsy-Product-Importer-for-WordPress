@@ -1,67 +1,85 @@
 <?php
+/**
+ * Include and setup options page.
+ *
+ * @category Etsy Importer
+ * @package  Options
+ * @license  http://www.opensource.org/licenses/gpl-license.php GPL v2.0 (or later)
+ * @link     https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress
+ */
 
+/**
+ * Set up our options page.
+ */
 class Etsy_Options_Admin {
 
 	/**
-	 * Option key, and option page slug
+	 * Option key, and option page slug.
+	 *
 	 * @var string
 	 */
 	private $key = 'etsy_options';
 
 	/**
-	 * Array of metaboxes/fields
+	 * Array of metaboxes/fields.
+	 *
 	 * @var array
 	 */
 	protected $option_metabox = array();
 
 	/**
-	 * Options Page title
+	 * Options Page title.
+	 *
 	 * @var string
 	 */
 	protected $title = '';
 
 	/**
-	 * Options Page hook
+	 * Options Page hook.
+	 *
 	 * @var string
 	 */
 	protected $options_page = '';
 
 	/**
-	 * Constructor
+	 * Constructor.
+	 *
 	 * @since 0.1.0
+	 *
 	 * @param string $post_type Post type to use regarding our settings page.
 	 */
 	public function __construct( $post_type ) {
 		$this->post_type = $post_type;
 
-		// Set our title
+		// Set our title.
 		$this->title = __( 'Etsy Importer Settings', 'etsy_importer' );
 
-		// Set our CMB2 fields
+		// Set our CMB2 fields.
 		$this->fields = array(
 			array(
 				'name' => __( 'API Key', 'etsy_importer' ),
 				'desc' => $this->api_key_description(),
 				'id'   => 'etsy_importer_api_key',
-				'type' => 'text'
+				'type' => 'text',
 			),
 			array(
 				'name' => __( 'Store ID', 'etsy_importer' ),
 				'desc' => $this->store_id_description(),
 				'id'   => 'etsy_importer_store_id',
-				'type' => 'text'
+				'type' => 'text',
 			),
 			array(
 				'name' => __( 'Disable updating of post status on product import', 'etsy_importer' ),
 				'desc' => __( 'When left unchecked, any product in your Etsy shop which is no longer active will be automatically set to draft status; any product in your Etsy shop which was previously inactive and has become active will be automatically set to publish status.', 'etsy_importer' ),
 				'id'   => 'etsy_importer_status_checkbox',
-				'type' => 'checkbox'
+				'type' => 'checkbox',
 			),
 		);
 	}
 
 	/**
-	 * Initiate our hooks
+	 * Initiate our hooks.
+	 *
 	 * @since 0.1.0
 	 */
 	public function hooks() {
@@ -70,15 +88,17 @@ class Etsy_Options_Admin {
 	}
 
 	/**
-	 * Register our setting to WP
-	 * @since  0.1.0
+	 * Register our setting to WP.
+	 *
+	 * @since 0.1.0
 	 */
 	public function init() {
 		register_setting( $this->key, $this->key );
 	}
 
 	/**
-	 * Add menu options page
+	 * Add menu options page.
+	 *
 	 * @since 0.1.0
 	 */
 	public function add_options_page() {
@@ -86,8 +106,9 @@ class Etsy_Options_Admin {
 	}
 
 	/**
-	 * Admin page markup. Mostly handled by CMB2
-	 * @since  0.1.0
+	 * Admin page markup. Mostly handled by CMB2.
+	 *
+	 * @since 0.1.0
 	 */
 	public function admin_page_display() {
 		?>
@@ -99,14 +120,16 @@ class Etsy_Options_Admin {
 	}
 
 	/**
-	 * Defines the theme option metabox and field configuration
-	 * @since  0.1.0
+	 * Defines the theme option metabox and field configuration.
+	 *
+	 * @since 0.1.0
+	 *
 	 * @return array
 	 */
 	public function option_metabox() {
 		return array(
 			'id'         => 'option_metabox',
-			'show_on'    => array( 'key' => 'options-page', 'value' => array( $this->key, ), ),
+			'show_on'    => array( 'key' => 'options-page', 'value' => array( $this->key ) ),
 			'show_names' => true,
 			'fields'     => $this->fields,
 		);
@@ -114,22 +137,25 @@ class Etsy_Options_Admin {
 
 	/**
 	 * Defines theme option metabox overrides.
+	 *
 	 * @since 1.4.0
+	 *
 	 * @return array
 	 */
 	public function option_metabox_overrides() {
 		return (array) apply_filters( 'etsy_importer_option_metabox_overrides', array(
-			'save_button' => __( 'Save &amp; Import', 'etsy_importer' )
+			'save_button' => __( 'Save &amp; Import', 'etsy_importer' ),
 		) );
 	}
 
 	/**
-	 * Retrieve the existing API Key from preivously registered settings
-	 * @return mixed Description text
+	 * Retrieve the existing API Key from preivously registered settings.
+	 *
+	 * @return mixed Description text.
 	 */
 	public function api_key_description() {
 
-		// Grab our settings
+		// Grab our settings.
 		$options = get_option( 'etsy_store_settings' );
 
 		$output = __( 'Enter your API Key above.', 'etsy_importer' );
@@ -146,12 +172,13 @@ class Etsy_Options_Admin {
 	}
 
 	/**
-	 * Retrieve the existing Store ID from preivously registered settings
+	 * Retrieve the existing Store ID from preivously registered settings.
+	 *
 	 * @return mixed Description text
 	 */
 	public function store_id_description() {
 
-		// Grab our settings
+		// Grab our settings.
 		$options = get_option( 'etsy_store_settings' );
 
 		$output = __( 'Enter your Store ID above.', 'etsy_importer' );
@@ -165,15 +192,18 @@ class Etsy_Options_Admin {
 	}
 
 	/**
-	 * Public getter method for retrieving protected/private variables
-	 * @since  0.1.0
-	 * @param  string  $field Field to retrieve
-	 * @return mixed          Field value or exception is thrown
-	 * @throws Exception
+	 * Public getter method for retrieving protected/private variables.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @throws Exception Invalid property provided.
+	 *
+	 * @param string $field Field to retrieve.
+	 * @return mixed Field value or exception is thrown.
 	 */
 	public function __get( $field ) {
 
-		// Allowed fields to retrieve
+		// Allowed fields to retrieve.
 		if ( in_array( $field, array( 'key', 'fields', 'title', 'options_page' ), true ) ) {
 			return $this->{$field};
 		}
@@ -183,14 +213,15 @@ class Etsy_Options_Admin {
 
 		throw new Exception( 'Invalid property: ' . $field );
 	}
-
 }
 
 /**
- * Wrapper function around cmb2_get_option
- * @since  0.1.0
- * @param  string  $key Options array key
- * @return mixed        Option value
+ * Wrapper function around cmb2_get_option.
+ *
+ * @since 0.1.0
+ *
+ * @param string $key Options array key.
+ * @return mixed Option value
  */
 function etsy_options_get_option( $key = '' ) {
 	return cmb2_get_option( Etsy_Importer::engage()->admin->key, $key );

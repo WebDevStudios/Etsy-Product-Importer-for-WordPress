@@ -6,8 +6,8 @@ Tags: etsy, store, shop, import, importer
 Author: WebDevStudios
 Author URI: http://www.webdevstudios.com
 Requires at least: 3.5
-Tested up to: 4.1
-Stable tag: trunk
+Tested up to: 4.5.2
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,6 +28,8 @@ The Etsy Importer will not only import your products but will also:
 * Check for existing posts which no longer exist in your shop as active products and set them to draft post status
 
 Not only do we import your products, but we add some shortcodes to help you integrate your products into blog posts.
+
+[Pluginize](https://pluginize.com/?utm_source=etsy-importer&utm_medium=text&utm_campaign=wporg) was launched in 2016 by [WebDevStudios](https://webdevstudios.com/) to promote, support, and house all of their [WordPress products](https://pluginize.com/shop/?utm_source=etsy-importer&utm_medium=text&utm_campaign=wporg). Pluginize is not only creating new products for WordPress all the time, but also provides [ongoing support and development for WordPress community favorites like CPTUI](https://wordpress.org/plugins/custom-post-type-ui/), [CMB2](https://wordpress.org/plugins/cmb2/), and more.
 
 = Shortcodes =
 
@@ -233,11 +235,11 @@ add_filter( 'etsy_importer_product_import_insert_args', 'your_project_modify_ets
 * Fix: PHP Magic Constant change for PHP 5.2 compatibility.
 * Fix: Amend error message to be more informative to user.
 * Fix: Amend settings save button text to indicate saving will process product imports.
-* Enhancement: Improvements to PHPDOcs for developers.
 * Fix: Remove usage of PHP extract function in shortcodes.
 * Fix: Match metabox field definitions to current CMB2 usage.
-* Enhancement: Highlight store ID to use in screenshot.
 * Fix: Update settings page URL in readme.txt
+* Enhancement: Improvements to PHPDocs for developers.
+* Enhancement: Highlight store ID to use in screenshot.
 * Updated internationalization files.
 
 = 1.3.2 =

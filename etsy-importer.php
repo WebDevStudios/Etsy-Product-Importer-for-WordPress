@@ -26,7 +26,9 @@ class Etsy_Importer {
 
 	/**
 	 * Creates or returns an instance of this class.
-	 * @since  0.1.0
+	 *
+	 * @since 0.1.0
+	 *
 	 * @return Etsy_Importer A single instance of this class.
 	 */
 	public static function engage() {
@@ -38,50 +40,49 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Build our class and run the functions
+	 * Build our class and run the functions.
 	 */
 	public function __construct() {
 
-		// Include CMB2
+		// Include CMB2.
 		if ( file_exists( dirname( __FILE__ ) . '/cmb2/init.php' ) ) {
 			require_once 'cmb2/init.php';
 		} elseif ( file_exists( dirname( __FILE__ ) . '/CMB2/init.php' ) ) {
-			echo 'hey buddy';
 			require_once 'CMB2/init.php';
 		}
 
-		// Include CMB2 Fields
+		// Include CMB2 Fields.
 		require_once 'includes/fields.php';
 
-		// Include Admin Settings Page
+		// Include Admin Settings Page.
 		require_once 'includes/settings-page.php';
 
-		// Get it started
+		// Get it started.
 		$this->admin = new Etsy_Options_Admin( $this->post_type_key() );
 		$this->admin->hooks();
 
-		// Setup our cron job
+		// Setup our cron job.
 		add_action( 'wp', array( $this, 'setup_cron_schedule' ) );
 
-		// Run our cron job to import new products
+		// Run our cron job to import new products.
 		add_action( 'etsy_importer_daily_cron_job', array( $this, 'import_posts' ) );
 
-		// Load translations
+		// Load translations.
 		load_plugin_textdomain( 'etsy_importer', false, 'etsy-importer/languages' );
 
-		// Define our constants
+		// Define our constants.
 		add_action( 'after_setup_theme', array( $this, 'constants' ), 1 );
 
-		// Register our post types
+		// Register our post types.
 		add_action( 'init', array( $this, 'post_types' ) );
 
-		// Register our taxonomies
+		// Register our taxonomies.
 		add_action( 'init', array( $this, 'taxonomies' ) );
 
-		// Run when we save our settings
+		// Run when we save our settings.
 		add_action( 'cmb2_save_options-page_fields', array( $this, 'settings_save' ) );
 
-		// Don't load in WP Dashboard
+		// Don't load in WP Dashboard.
 		if ( is_admin() ) {
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_styles' ), 21 );
 			add_action( 'admin_enqueue_scripts', 'add_thickbox', 21 );
@@ -89,28 +90,28 @@ class Etsy_Importer {
 			add_action( 'wp_head', array( $this, 'check_for_enqueue' ), 99 );
 		}
 
-		// Add shortcodes
+		// Add shortcodes.
 		require_once( 'includes/shortcodes.php' );
 		$this->shortcodes = new Etsy_Importer_Shortcodes();
 
-		// Grab our new values set via CMB2
+		// Grab our new values set via CMB2.
 		$etsy_options = get_option( 'etsy_options' );
 		$api_key      = isset( $etsy_options['etsy_importer_api_key'] ) ? esc_html( $etsy_options['etsy_importer_api_key'] ) : '';
 		$store_id     = isset( $etsy_options['etsy_importer_store_id'] ) ? esc_html( $etsy_options['etsy_importer_store_id'] ) : '';
 		$checkbox     = isset( $etsy_options['etsy_importer_status_checkbox'] ) ? $etsy_options['etsy_importer_status_checkbox'] : '';
 
-		// Set our API Key value to be used throughout the class
+		// Set our API Key value to be used throughout the class.
 		$this->api_key = $api_key;
 
-		// Set our Store ID value to be used throughout the class
+		// Set our Store ID value to be used throughout the class.
 		$this->store_id = $store_id;
 
-		// Set our checkbox value to be used throughout the class
+		// Set our checkbox value to be used throughout the class.
 		$this->post_status_on_import = $checkbox;
 	}
 
 	/**
-	 * Set our filterable post type
+	 * Set our filterable post type.
 	 */
 	public function post_type_key() {
 
@@ -118,7 +119,7 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Set our filterable category key
+	 * Set our filterable category key.
 	 */
 	public function category_key() {
 
@@ -126,7 +127,7 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Set our filterable tag key
+	 * Set our filterable tag key.
 	 */
 	public function tag_key() {
 
@@ -156,45 +157,47 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Define a constant if it hasn't been already (this allows them to be overridden)
-	 * @since  1.0.0
-	 * @param  string  $constant Constant name
-	 * @param  string  $value    Constant value
+	 * Define a constant if it hasn't been already (this allows them to be overridden).
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $constant Constant name.
+	 * @param string $value    Constant value.
 	 */
 	public function define_const( $constant, $value ) {
-		// (can be overridden via wp-config, etc)
+		// (can be overridden via wp-config, etc).
 		if ( ! defined( $constant ) ) {
 			define( $constant, $value );
 		}
 	}
 
 	/**
-	 * Load global styles
+	 * Load global styles.
 	 */
 	public function admin_styles() {
 
-		// Main stylesheet
+		// Main stylesheet.
 		wp_enqueue_style( 'etsy-importer', ETSY_CSS . 'style.css', null, self::VERSION );
 
 	}
 
 	/**
-	 * Load global styles
+	 * Load global styles.
 	 */
 	public function check_for_enqueue() {
 		global $post;
 
-		// Enqueue thickbox if the product images shortcode is used
+		// Enqueue thickbox if the product images shortcode is used.
 		if ( isset( $post->post_content ) && has_shortcode( $post->post_content, 'product_images' ) ) {
 			add_thickbox();
 		}
 	}
 
 	/**
-	 * Set our Custom Post Type labels
+	 * Set our Custom Post Type labels.
 	 *
 	 * Name (Singular), Name (Plural), Post Type Key (lowercase, use underscore for space),
-	 * URL Slug (lowercase, use dash for space), Search, Link To Taxonomies, Hierachical, Menu Position, Supports
+	 * URL Slug (lowercase, use dash for space), Search, Link To Taxonomies, Hierachical, Menu Position, Supports.
 	 */
 	public function post_types() {
 
@@ -207,9 +210,10 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Register our custom post type
-	 * @param  array  $type  Label values for CPT label
-	 * @param  array  $args  CPT settings
+	 * Register our custom post type.
+	 *
+	 * @param array $type Label values for CPT label.
+	 * @param array $args CPT settings.
 	 */
 	public function post_type( $type, $args = array() ) {
 
@@ -218,7 +222,7 @@ class Etsy_Importer {
 		$key         = $type[2];
 		$slug        = $type[3];
 
-		// Setup our labels
+		// Setup our labels.
 		$labels = array(
 			'name'               => $type_single,
 			'singular_name'      => $type_single,
@@ -251,14 +255,15 @@ class Etsy_Importer {
 			'menu_icon'           => 'dashicons-cart',
 		) );
 
-		// Register our post types
+		// Register our post types.
 		register_post_type( $key, $args );
 	}
 
 	/**
-	 * Set custom taxonomy labels
+	 * Set custom taxonomy labels.
 	 *
-	 * Name (Singular), Name (Plural), Taxonomy Key (lowercase, use underscore for space), URL Slug (lowercase, use dash for space), Parent Post Type Key
+	 * Name (Singular), Name (Plural), Taxonomy Key (lowercase, use underscore for space),
+	 * URL Slug (lowercase, use dash for space), Parent Post Type Key
 	 */
 	public function taxonomies() {
 
@@ -267,17 +272,18 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Register taxonomies
-	 * @param  string  $type            Singular name
-	 * @param  string  $types           Plural name
-	 * @param  string  $key             Taxonomy key
-	 * @param  string  $url_slug        Taxonomy slug
-	 * @param  array   $post_type_keys  Post type keys
-	 * @param  boolean $public          Boolean value for public/non-public taxonomy
+	 * Register taxonomies.
+	 *
+	 * @param string  $type           Singular name.
+	 * @param string  $types          Plural name.
+	 * @param string  $key            Taxonomy key.
+	 * @param string  $url_slug       Taxonomy slug.
+	 * @param array   $post_type_keys Post type keys.
+	 * @param boolean $public         Boolean value for public/non-public taxonomy.
 	 */
 	public function taxonomy( $type, $types, $key, $url_slug, $post_type_keys, $public ) {
 
-		// Setup our labels
+		// Setup our labels.
 		$labels = array(
 			'name'                       => $types,
 			'singular_name'              => $type,
@@ -295,14 +301,14 @@ class Etsy_Importer {
 			'choose_from_most_used'      => sprintf( __( 'Choose from the most used %s', 'etsy_importer' ), $types ),
 		);
 
-		// Permalink
+		// Permalink.
 		$rewrite = array(
 			'slug'                       => $url_slug,
 			'with_front'                 => true,
 			'hierarchical'               => true,
 		);
 
-		// Default arguments
+		// Default arguments.
 		$args = array(
 			'labels'                     => $labels,
 			'hierarchical'               => true,
@@ -315,14 +321,15 @@ class Etsy_Importer {
 			'rewrite'                    => $rewrite,
 		);
 
-		// Register our taxonomies
+		// Register our taxonomies.
 		register_taxonomy( $key, $post_type_keys, $args );
 
 	}
 
 	/**
 	 * On an early action hook, check if the hook is scheduled - if not, schedule it.
-	 * This runs once daily
+	 *
+	 * This runs once daily.
 	 */
 	public function setup_cron_schedule() {
 		if ( ! wp_next_scheduled( 'etsy_importer_daily_cron_job' ) ) {
@@ -333,11 +340,10 @@ class Etsy_Importer {
 	/**
 	 * Grab the image ID from its URL.
 	 *
-	 * @param string $image_src
-	 *
+	 * @param string $image_src Image URL.
 	 * @return int $id
 	 */
-	public function get_attachment_id_from_src( $image_src ){
+	public function get_attachment_id_from_src( $image_src ) {
 		global $wpdb;
 
 		$query = "SELECT ID FROM {$wpdb->posts} WHERE guid='$image_src'";
@@ -351,7 +357,7 @@ class Etsy_Importer {
 	 */
 	public function settings_save() {
 
-		// If both the API Key and Store ID values are set and both are not empty, do something
+		// If both the API Key and Store ID values are set and both are not empty, do something.
 		if ( isset( $this->api_key ) && '' !== $this->api_key && isset( $this->store_id ) && '' !== $this->store_id ) {
 			$this->import_posts();
 		}
@@ -362,24 +368,24 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Register the function that imports our posts
+	 * Register the function that imports our posts.
 	 */
 	public function import_posts() {
 
-		// Make sure you define API_KEY to be your unique, registered key
+		// Make sure you define API_KEY to be your unique, registered key.
 		$response = $this->get_results_count();
 
 		if ( ! isset( $response->count ) ) {
-			wp_die( __( 'No product count paramater available from Etsy response. Are there any products available?', 'etsy_importer' ) );
+			wp_die( esc_html__( 'No product count paramater available from Etsy response. Are there any products available?', 'etsy_importer' ) );
 		}
 
-		// Get the total number of products so we can loop through each page
+		// Get the total number of products so we can loop through each page.
 		$total_count = $response->count;
 
-		// Divide our total by 25 to get 25 results per page
+		// Divide our total by 25 to get 25 results per page.
 		$paged_total = ceil( $total_count / 25 );
 
-		// Loop through pages enough times for each page of results
+		// Loop through pages enough times for each page of results.
 		$post_limit  = 25;
 		$post_offset = 0;
 
@@ -403,7 +409,7 @@ class Etsy_Importer {
 				return;
 			}
 
-			// Get each listing
+			// Get each listing.
 			$this->import_each_product( $paged_response );
 
 			$post_limit  = $post_limit + 25;
@@ -423,54 +429,54 @@ class Etsy_Importer {
 		}
 
 		// Check to see if any posts are no longer in our Etsy shop. If not, set them to draft mode
-		// ONLY when our checkbox is unchecked in settings
+		// ONLY when our checkbox is unchecked in settings.
 		$this->set_inactive_posts_to_draft( $paged_response );
 
-		// Increase our time limit
+		// Increase our time limit.
 		set_time_limit( 120 );
 
-		// Loop through each product
+		// Loop through each product.
 		foreach ( $paged_response->results as $product ) {
 
 			// If the post exists, don't bother
-			// @TO DO: In our next update, switch this out to look for the matching product listing ID
+			// @TO DO: In our next update, switch this out to look for the matching product listing ID.
 			if ( get_page_by_title( esc_html( $product->title ), OBJECT, $this->post_type_key() ) ) {
 
 				$existing_post = get_page_by_title( esc_html( $product->title ), OBJECT, $this->post_type_key() );
 
-				// Import the product listing ID as post meta
+				// Import the product listing ID as post meta.
 				$this->import_product_listing_id( $existing_post->ID, $product );
 
 				// Then stop.
 				continue;
 			}
 
-			// Set up our post args
+			// Set up our post args.
 			$post_args = $this->setup_post_args( $product );
 
-			// Create our post
+			// Create our post.
 			$post_id = wp_insert_post( $post_args );
 
-			// Update our post meta with the group ID
+			// Update our post meta with the group ID.
 			$this->update_product_post_meta( $post_id, $product );
 
-			// Import the product listing ID as post meta
+			// Import the product listing ID as post meta.
 			$this->import_product_listing_id( $post_id, $product );
 
-			// Set our categories
+			// Set our categories.
 			if ( isset( $product->category_path ) ) {
 				wp_set_object_terms( $post_id, $product->category_path, $this->category_key(), true );
 			}
 
-			// Set our tags
+			// Set our tags.
 			if ( isset( $product->tags ) ) {
 				wp_set_object_terms( $post_id, $product->tags, $this->tag_key(), true );
 			}
 
-			// Get each listing's images
+			// Get each listing's images.
 			$response = $this->get_product_images( $product );
 
-			// Get our attached images
+			// Get our attached images.
 			$this->add_images_to_product_post( $post_id, $response );
 
 			do_action( 'etsy_importer_product_import', $post_id, $product );
@@ -481,13 +487,13 @@ class Etsy_Importer {
 	/**
 	 * Setup our post args.
 	 *
-	 * @param object $product
+	 * @param object $product Product object.
 	 *
 	 * @return array
 	 */
 	public function setup_post_args( $product ) {
 
-		// Get the product description
+		// Get the product description.
 		$product_description = ! empty( $product->description ) ? wp_kses_post( $product->description ) : '';
 
 		return apply_filters( 'etsy_importer_product_import_insert_args', array(
@@ -502,7 +508,7 @@ class Etsy_Importer {
 	 * Import the product listing ID as post meta
 	 *
 	 * @param int    $post_id ID of the post to update.
-	 * @param object $product
+	 * @param object $product Product object.
 	 */
 	public function import_product_listing_id( $post_id, $product ) {
 
@@ -515,7 +521,7 @@ class Etsy_Importer {
 	 * Add/Update the product's post meta.
 	 *
 	 * @param int    $post_id ID of the post to update.
-	 * @param object $product
+	 * @param object $product Product object.
 	 */
 	public function update_product_post_meta( $post_id, $product ) {
 
@@ -545,7 +551,7 @@ class Etsy_Importer {
 	 * Attach the images to the product post.
 	 *
 	 * @param int    $post_id ID of the post to add images to.
-	 * @param object $response
+	 * @param object $response Response object.
 	 */
 	public function add_images_to_product_post( $post_id, $response ) {
 
@@ -553,20 +559,20 @@ class Etsy_Importer {
 			return;
 		}
 
-		// Loop through each listing's images and upload them
+		// Loop through each listing's images and upload them.
 		foreach ( $response->results as $image ) {
 
-			// Get our image URL and basename
+			// Get our image URL and basename.
 			$image_url = $image->url_fullxfull;
 			$filename  = basename( $image->url_fullxfull );
 
-			// Upload our image and attach it to our post
+			// Upload our image and attach it to our post.
 			$uploaded_image = media_sideload_image( $image_url, $post_id, $filename );
 
-			// Grab the src URL from our image tag
+			// Grab the src URL from our image tag.
 			$uploaded_image = preg_replace( "/.*(?<=src=[''])([^'']*)(?=['']).*/", '$1', $uploaded_image );
 
-			// Set post thumbnail to the image with rank 1
+			// Set post thumbnail to the image with rank 1.
 			if ( isset( $image->rank ) && 1 == $image->rank ) {
 				set_post_thumbnail( $post_id, $this->get_attachment_id_from_src( $uploaded_image ) );
 			}
@@ -574,7 +580,7 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Get response from etsy
+	 * Get response from etsy.
 	 */
 	public function get_response() {
 
@@ -590,7 +596,7 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Get results for our initial query
+	 * Get results for our initial query.
 	 */
 	public function get_results_count() {
 
@@ -603,9 +609,8 @@ class Etsy_Importer {
 	/**
 	 * Get paged results.
 	 *
-	 * @param int $post_limit
-	 * @param int $post_offset
-	 *
+	 * @param int $post_limit  Limit of products to fetch.
+	 * @param int $post_offset Offset for where to start at.
 	 * @return object
 	 */
 	public function get_paged_results( $post_limit, $post_offset ) {
@@ -619,8 +624,7 @@ class Etsy_Importer {
 	/**
 	 * Get the product's images.
 	 *
-	 * @param object $product
-	 *
+	 * @param object $product Product object.
 	 * @return object
 	 */
 	public function get_product_images( $product ) {
@@ -631,11 +635,11 @@ class Etsy_Importer {
 	}
 
 	/**
-	 * Get results generically for a url
+	 * Get results generically for a url.
+	 *
 	 * @todo possibly better handline for wp_die in some instances
 	 *
-	 * @param string $url
-	 *
+	 * @param string $url URL to fetch data from.
 	 * @return object
 	 */
 	public function get_results( $url ) {
@@ -659,37 +663,37 @@ class Etsy_Importer {
 	 * Update our post status to draft mode if it is
 	 * no longer in the Active state on Etsy.
 	 *
-	 * @param object $paged_response
+	 * @param object $paged_response Paged response data.
 	 */
 	public function set_inactive_posts_to_draft( $paged_response ) {
 
-		// If the box is checked, don't try to change post statuses
+		// If the box is checked, don't try to change post statuses.
 		if ( isset( $_POST['etsy_importer_status_checkbox'] ) ) {
 			return;
 		}
 
-		// Retrieve ALL product posts
+		// Retrieve ALL product posts.
 		$all_products = get_posts( array( 'post_type' => $this->post_type_key(), 'posts_per_page' => -1, 'post_status' => 'any' ) );
 
 		// Begin an array of product titles
-		// as served by the Etsy API
+		// as served by the Etsy API.
 		$all_product_titles = array();
 
-		// Loop through each product from Etsy
+		// Loop through each product from Etsy.
 		foreach ( $paged_response->results as $product ) {
 
-			// Add the product title to our array
+			// Add the product title to our array.
 			$all_product_titles[] = $product->title;
 
 		}
 
-		// Loop through each product in our CPT
+		// Loop through each product in our CPT.
 		foreach ( $all_products as $this_product ) {
 
-			// Set our in_array outcome to a variable
+			// Set our in_array outcome to a variable.
 			$in_product_array = in_array( $this_product->post_title, $all_product_titles );
 
-			// Set the default post status to publish
+			// Set the default post status to publish.
 			$post_status = apply_filters( 'etsy_importer_default_post_status', 'publish' );
 
 			// Check to see our post is in our product array.
@@ -700,18 +704,18 @@ class Etsy_Importer {
 
 			}
 
-			// If it is not in the response, set it to draft
+			// If it is not in the response, set it to draft.
 			$update_post_args = array(
 				'ID'          => $this_product->ID,
 				'post_status' => $post_status,
 			);
 
-			// Update our post settings
+			// Update our post settings.
 			wp_update_post( apply_filters( 'etsy_importer_updated_post_args', $update_post_args ) );
 
 		}
 	}
 }
 
-// Instantiate the class
+// Instantiate the class.
 Etsy_Importer::engage();

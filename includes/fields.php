@@ -10,22 +10,19 @@
 
 /**
  * Define the metabox and field configurations.
- *
- * @param  array $meta_boxes
- * @return array
  */
-function etsy_metaboxes( array $meta_boxes ) {
+function etsy_metaboxes() {
 
-	// Start with an underscore to hide fields from custom fields list
+	// Start with an underscore to hide fields from custom fields list.
 	$prefix = '_etsy_product_';
 
 	$etsy_metaboxes = new_cmb2_box( array(
 		'id'           => 'etsy_product_info',
 		'title' => __( 'Product Information', 'etsy_importer' ),
-		'object_types' => array( apply_filters( 'etsy_importer_custom_post_type_key', 'etsy_products' ), ), // Post type
+		'object_types' => array( apply_filters( 'etsy_importer_custom_post_type_key', 'etsy_products' ) ), // Post type.
 		'context' => 'normal',
 		'priority' => 'high',
-		'show_names' => true, // Show field names on the left
+		'show_names' => true, // Show field names on the left.
 	) );
 
 	$etsy_metaboxes->add_field( array(
@@ -57,8 +54,8 @@ function etsy_metaboxes( array $meta_boxes ) {
 		'id'         => $prefix . 'id',
 		'type'       => 'text_small',
 		'attributes' => array(
-			'disabled' => 'disabled'
-		)
+			'disabled' => 'disabled',
+		),
 	) );
 
 }
