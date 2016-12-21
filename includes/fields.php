@@ -59,4 +59,4 @@ function etsy_metaboxes() {
 	) );
 
 }
-add_filter( 'cmb2_meta_boxes', 'etsy_metaboxes' );
+add_action( 'cmb2_init', 'etsy_metaboxes' );
